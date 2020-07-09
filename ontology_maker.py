@@ -149,10 +149,11 @@ def get_league_info(url):
             continue
 
 
+ make_ontology(url)
 if __name__ == '__main__':
     print("running...")
 
-    get_league_info("https://en.wikipedia.org/wiki/2019%E2%80%9320_Premier_League")
+    make_ontology("https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)")
     ontology.serialize("ontology.nt", format="nt")
 
     print("done.")

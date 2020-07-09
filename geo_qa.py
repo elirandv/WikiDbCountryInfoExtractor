@@ -151,10 +151,31 @@ def get_league_info(url):
 
 
 if __name__ == '__main__':
-    print("running...")
+    print("WikiDb Country Info Extractor is running...")
+    command=sys.argv[1]
+    if (command=="create"):        
+        '''get_league_info("https://en.wikipedia.org/wiki/2019%E2%80%9320_Premier_League")'''
+        '''ontology.serialize("ontology.nt", format="nt")'''
+    else if (command=="question"):
+        '''question_to_query(sys.argv[2])'''
+        ,,,
+    print("WikiDb Country Info Extractor off.")
 
-    print(sys.argv[1])
-    '''get_league_info("https://en.wikipedia.org/wiki/2019%E2%80%9320_Premier_League")'''
-    '''ontology.serialize("ontology.nt", format="nt")'''
 
-    print("done.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

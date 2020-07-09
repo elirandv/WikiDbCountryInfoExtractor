@@ -1,4 +1,4 @@
-
+import sys
 import requests
 import lxml.html
 import rdflib
@@ -153,7 +153,8 @@ def get_league_info(url):
 if __name__ == '__main__':
     print("running...")
 
-    get_league_info("https://en.wikipedia.org/wiki/2019%E2%80%9320_Premier_League")
-    ontology.serialize("ontology.nt", format="nt")
+    print(sys.argv[1])
+    '''get_league_info("https://en.wikipedia.org/wiki/2019%E2%80%9320_Premier_League")'''
+    '''ontology.serialize("ontology.nt", format="nt")'''
 
     print("done.")

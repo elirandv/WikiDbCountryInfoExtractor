@@ -149,7 +149,21 @@ def get_league_info(url):
             continue
 
 
- make_ontology(url)
+def get_countries(url):
+    res = requests.get(url)
+    doc = lxml.html.fromstring(res.content)
+    countryTable = doc.xpath(
+        "//table[@id="main"]")
+
+
+def make_ontology(url):
+    # get dict of countries and links to wikipages
+    country_dict = get_countries(url)
+    for country in country_dict:
+        add_to_onto(country)
+        get_country_info(country_dict[country])
+
+
 if __name__ == '__main__':
     print("running...")
 

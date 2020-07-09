@@ -3,33 +3,28 @@ import lxml.html
 import rdflib
 
 
-# aux func
-def clean_string(some_str):
-    #some_str = "".join(some_str.splitlines())
-    return some_str.strip().replace("\n", "").replace(" ", "_")
-
-
 wiki_prefix = "http://en.wikipedia.org"
 example_prefix = "http://example.org/"
 
 # i use global ontology for faster run time
 ontology = rdflib.Graph()
 
-# player edges
-playsFor_edge = rdflib.URIRef(example_prefix + "playsFor")
-birthPlace_edge = rdflib.URIRef(example_prefix + "birthPlace")
-birthDate_edge = rdflib.URIRef(example_prefix + "birthDate")
-position_edge = rdflib.URIRef(example_prefix + "position")
+# country edges
+president_edge = rdflib.URIRef(wiki_prefix + "/president")
+prime_minister_edge = rdflib.URIRef(wiki_prefix + "/prime_minister")
+population_edge = rdflib.URIRef(wiki_prefix + "/population")
+area_edge = rdflib.URIRef(wiki_prefix + "/area")
+government_edge = rdflib.URIRef(wiki_prefix + "/government")
+capitol_edge = rdflib.URIRef(wiki_prefix + "/capitol")
 
-# team edges
-league_edge = rdflib.URIRef(example_prefix + "league")
-homeCity_edge = rdflib.URIRef(example_prefix + "homeCity")
+# person edges
+birthDate_edge = rdflib.URIRef(wiki_prefix + "/birthDate")
 
-# league edges
-country_edge = rdflib.URIRef(example_prefix + "country")
 
-# city edges
-located_in_edge = rdflib.URIRef(example_prefix + "located_in")
+# aux func
+def clean_string(some_str):
+    # some_str = "".join(some_str.splitlines())
+    return some_str.strip().replace("\n", "").replace(" ", "_")
 
 
 def get_player_info(url, player):
@@ -149,19 +144,76 @@ def get_league_info(url):
             continue
 
 
+def add_to_onto(str):
+    return rdflib.URIRef(wiki_prefix + "/" + str)
+
+
+def get_person_info(person, url):
+    dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
+
+
+def get_country_info(country, url):
+    res = requests.get(url)
+    doc = lxml.html.fromstring(res.content)
+
+    infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
+    # prime minister
+    # population
+    # area
+    # government
+    # capital
+    # it's possible to get more than one infobox, in that case, check all of them
+    for i in range(len(infoboxlist)):
+        try:
+            # president
+            pres = infoboxlist[i].xpath(".//a[contains(text(), 'President')]/../td[1]/span/a")
+            president = clean_string(pres.xpath("./@title")[0])
+            pres_link = wiki_prefix + pres.xpath("./@href")[0]
+
+            president = add_to_onto(president)
+            ontology.add((country, president_edge_edge, president))
+            get_person_info(president ,pres_link)
+        except:
+            print("Error")
+            exit()
+            # pass
+    exit()
+
+
 def get_countries(url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
-    countryTable = doc.xpath(
-        "//table[@id="main"]")
+    countrylist = doc.xpath(
+        '//table[@id="main"]/tbody/tr/td[1]//span/a[@title]')
+    # edge case, add to list
+    # i put it in place for reasons unknown even to myself
+    countrylist.insert(189, doc.xpath(
+        '//table[@id="main"]/tbody/tr/td[1]//a[@title="Channel Islands"]')[0])
+    res = {}
+    for i in range(len(countrylist)):
+        try:
+            country = clean_string(countrylist[i].xpath("./@title")[0])
+            url = wiki_prefix + countrylist[i].xpath("./@href")[0]
+            res[country] = url
+        except:
+            print("error")
+            exit()
+            continue
+    return res
 
 
 def make_ontology(url):
     # get dict of countries and links to wikipages
     country_dict = get_countries(url)
+    i = 1
     for country in country_dict:
-        add_to_onto(country)
-        get_country_info(country_dict[country])
+        url = country_dict[country]
+        print("country#" + str(i))
+        print(country + "\t" + url)
+        i += 1
+        if i == 3:
+            rdf_c = add_to_onto(country)
+            get_country_info(rdf_c, url)
 
 
 if __name__ == '__main__':

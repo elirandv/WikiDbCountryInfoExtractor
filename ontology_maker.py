@@ -177,18 +177,20 @@ def get_pm(infobox, country):
         prime_m = clean_string(pm)
         pm_link = wiki_prefix + pm
 
-        print(prime_m + "\t" + pm_link)
+        print("\t" + prime_m + "\t" + pm_link)
         prime_m = add_to_onto(prime_m)
         ontology.add((country, prime_minister_edge, prime_m))
 
         get_person_info(prime_m, pm_link)
     except Exception as e:
+        print("\t-- get_pm Error: --")
         print(e)
-        print("\nError\n")
-        if times > 4:
-            exit()
-        else:
-            times+=1
+    times+=1
+    print(times)
+        # if times > 4:
+            # exit()
+        # else:
+            # times+=1
         # pass
 
 
@@ -251,8 +253,8 @@ def get_countries(url):
             url = wiki_prefix + countrylist[i].xpath("./@href")[0]
             res[country] = url
         except Exception as e:
+            print("\t-- get_countries Error: --")
             print(e)
-            print("error")
             exit()
             continue
     return res
@@ -265,8 +267,8 @@ def make_ontology(url):
     res = 0
     for country in country_dict:
         url = country_dict[country]
-        print("country#" + str(i))
-        print(country + "\t" + url)
+        print("\nCountry#" + str(i))
+        print("\t"+country + "\t" + url)
 
         rdf_c = add_to_onto(country)
         res += get_country_info(rdf_c, url)

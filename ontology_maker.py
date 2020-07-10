@@ -157,21 +157,32 @@ def get_person_info(person, url):
 
 times = 0
 def get_country_info(country, url):
+    global times
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
     infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
-    # prime minister
     # population
     # area
     # government
     # capital
     # it's possible to get more than one infobox, in that case, check all of them
     success = 1 #len(infoboxlist)
-    global times
     #for i in range(len(infoboxlist)):
     try:
         # president
+        pres = infoboxlist[0].xpath(".//a[text() = 'President']/../../following-sibling::td//a")[0]
+        president = clean_string(pres.xpath("./@href")[0])
+        pres_link = wiki_prefix + pres.xpath("./@href")[0]
+
+        # print(president + "\t" + pres_link)
+        president = add_to_onto(president)
+        ontology.add((country, president_edge, president))
+        get_person_info(president, pres_link)
+    except Exception:
+        pass
+    try:
+        # prime minister
         pres = infoboxlist[0].xpath(".//a[text() = 'President']/../../following-sibling::td//a")[0]
         president = clean_string(pres.xpath("./@href")[0])
         pres_link = wiki_prefix + pres.xpath("./@href")[0]
@@ -184,7 +195,7 @@ def get_country_info(country, url):
         print(e)
         print("\nError\n")
         success-=1
-        if times > 5:
+        if times > 10:
             exit()
         else:
             times+=1
@@ -195,16 +206,17 @@ def get_country_info(country, url):
 def get_countries(url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
+    # get countries form table
     countrylist = doc.xpath(
         '//table[@id="main"]/tbody/tr/td[1]//span/a[@title]')
-    # edge case, add to list
+    # edge case, add 'Channel Islands' to list
     # i put it in place for reasons unknown even to myself
     countrylist.insert(189, doc.xpath(
         '//table[@id="main"]/tbody/tr/td[1]//a[@title="Channel Islands"]')[0])
     res = {}
     for i in range(len(countrylist)):
         try:
-            country = clean_string(countrylist[i].xpath("./@title")[0])
+            country = clean_string(countrylist[i].xpath("./@href")[0])
             url = wiki_prefix + countrylist[i].xpath("./@href")[0]
             res[country] = url
         except:

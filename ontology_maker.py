@@ -209,13 +209,13 @@ def get_country_info(country, url):
     # prime minister
     # get_pm(infoboxlist[0], country)
     # government
-    get_government(infoboxlist[0], country)
+    # get_government(infoboxlist[0], country)
     # area
     # get_area(infoboxlist[0], country)
     # population
     # get_pop(infoboxlist[0], country)
     # capital
-    #get_capitol(infoboxlist[0], country)
+    get_capitol(infoboxlist[0], country)
     return 1
 
 

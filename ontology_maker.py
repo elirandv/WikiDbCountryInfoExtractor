@@ -130,7 +130,7 @@ def get_government(infobox, country):
         if government == "":
             raise ValueError('Government Not Found')
 
-        print(government + "\t")
+        # print(government + "\t")
         government = add_to_onto(government)
         ontology.add((country, government_edge, government))
 
@@ -143,7 +143,6 @@ def get_government(infobox, country):
         times_gvm_r += 1
     if "monarchy" in government or "Monarchy" in government:
         times_gvm_m += 1
-    print("times_gvm_r=" + str(times_gvm_r) + "\t" + "times_gvm_m=" + str(times_gvm_r))
 
 
 def get_area(infobox, country):
@@ -240,9 +239,8 @@ def make_ontology(url):
         rdf_c = add_to_onto(country)
         res += get_country_info(rdf_c, url)
         i += 1
-        # if i == 6:
-        #     break
     print("Countries count in Ontology=" + str(res))
+    print("times_gvm_r=" + str(times_gvm_r) + "\t" + "times_gvm_m=" + str(times_gvm_m))
 
 
 if __name__ == '__main__':

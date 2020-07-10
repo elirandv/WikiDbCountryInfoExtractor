@@ -29,6 +29,15 @@ def clean_string(some_str):
     return some_str.strip().replace("\n", "").replace(" ", "_")
 
 
+def handle_gvlist(strlist):
+    res = ""
+    for str in strlist:
+        if "[" or "]" in str:
+            continue
+        res += str
+    return clean_string(res)
+
+
 def get_player_info(url, player):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
@@ -117,11 +126,10 @@ def get_government(infobox, country):
     try:
         gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()|.//th[contains(text(), "
                                "'Government')]/../td//text()")
-        print(gvlist)
         # exit()
-        government = clean_string(gvlist[0])
+        government = handle_gvlist(gvlist)
 
-        print(government + "\t")
+        print("WTF"+government + "\t")
         government = add_to_onto(government)
         ontology.add((country, government_edge, government))
 
@@ -182,9 +190,9 @@ def get_country_info(country, url):
     # government
     get_government(infoboxlist[0], country)
     # area
-    get_area(infoboxlist[0], country)
+    #get_area(infoboxlist[0], country)
     # population
-    get_pop(infoboxlist[0], country)
+    #get_pop(infoboxlist[0], country)
     return 1
 
 

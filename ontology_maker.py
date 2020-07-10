@@ -138,13 +138,8 @@ def get_government(infobox, country):
 
     except Exception as e:
         print(e)
-<<<<<<< HEAD
         print("\n** Government collection Error: "+country+" **\n")
         exit()
-=======
-        print("\nError\n")
->>>>>>> 6d59bdb4dbc85650db5213837fd49a0ee64637c9
-        # pass
 
 
 def get_area(infobox, country):

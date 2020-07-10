@@ -185,7 +185,7 @@ def get_pm(infobox, country):
     except Exception as e:
         print(e)
         print("\nError\n")
-        if times > 2:
+        if times > 4:
             exit()
         else:
             times+=1

@@ -137,18 +137,7 @@ def get_government(infobox, country):
         ontology.add((country, government_edge, government))
 
     except Exception as e:
-<<<<<<< HEAD
         pass
-    if "republic" in government or "Republic" in government:
-        times_gvm_r+=1
-    if "monarchy" in government or "Monarchy" in government:
-        times_gvm_m+=1
-    print("times_gvm_r="+ str(times_gvm_r)+ "\t" + "times_gvm_m=" + str(times_gvm_r))
-=======
-        print(e)
-        print("\n** Government collection Error: "+country+" **\n")
-        exit()
->>>>>>> fd34ccacefe6e92d6fe41a28a8f945f27ffde768
 
 
 def get_area(infobox, country):

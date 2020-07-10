@@ -115,7 +115,8 @@ def get_government(infobox, country):
     global times_gvm_m
     global times_gvm_r
     try:
-        gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()|.//th[contains(text(), 'Government')]/../td//text()")
+        gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()|.//th[contains(text(), "
+                               "'Government')]/../td//text()")
         print(gvlist)
         # exit()
         government = clean_string(gvlist[0])
@@ -123,6 +124,38 @@ def get_government(infobox, country):
         print(government + "\t")
         government = add_to_onto(government)
         ontology.add((country, government_edge, government))
+
+    except Exception as e:
+        print(e)
+        print("\nError\n")
+        exit()
+        # pass
+
+
+def get_area(infobox, country):
+    try:
+        a = infobox.xpath(" ")[0]
+        area = clean_string(a)
+
+        print(area + "\t")
+        area = add_to_onto(area)
+        ontology.add((country, area_edge, area))
+
+    except Exception as e:
+        print(e)
+        print("\nError\n")
+        exit()
+        # pass
+
+
+def get_pop(infobox, country):
+    try:
+        p = infobox.xpath(" ")[0]
+        population = clean_string(p)
+
+        print(population + "\t")
+        population = add_to_onto(population)
+        ontology.add((country, population_edge, population))
 
     except Exception as e:
         print(e)
@@ -139,8 +172,6 @@ def get_country_info(country, url):
     doc = lxml.html.fromstring(res.content)
 
     infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
-    # population
-    # area
     # capital
     # it's possible to get more than one infobox, in that case, check all of them
     #for i in range(len(infoboxlist)):
@@ -150,6 +181,10 @@ def get_country_info(country, url):
     #get_pm(infoboxlist[0], country)
     # government
     get_government(infoboxlist[0], country)
+    # area
+    get_area(infoboxlist[0], country)
+    # population
+    get_pop(infoboxlist[0], country)
     return 1
 
 

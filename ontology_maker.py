@@ -137,9 +137,6 @@ def get_government(infobox, country):
         ontology.add((country, government_edge, government))
 
     except Exception as e:
-        print(e)
-        print("\n** Government collection Error: "+country+" **\n")
-        exit()
 
 
 def get_area(infobox, country):

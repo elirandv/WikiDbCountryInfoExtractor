@@ -179,17 +179,16 @@ def get_pop(infobox, country):
 
 def get_capitol(infobox, country):
     try:
-        cap = infobox.xpath(".//tr/th/text()[contains(., 'Capital')]/../../td/a/@href")[0]
+        cap = infobox.xpath(".//tr/th/text()[contains(., 'Capital')]/../../td//a/@href")[0]
         capitol = clean_string(cap)
         cap_link = wiki_prefix + cap
 
-        print("\t" + country + ",\t" + capitol + ":\t" + cap_link)
+        print("\t" + str(country) + ",\t" + capitol + ":\t" + cap_link)
 
         capitol = add_to_onto(capitol)
         ontology.add((country, president_edge, capitol))
 
-        get_person_info(capitol, cap_link)
-    except Exception:
+    except Exception as e:
         print("\n** Capitol collection Error: "+str(country)+" **\n")
         print(e)
         pass

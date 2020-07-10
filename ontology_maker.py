@@ -56,7 +56,7 @@ def get_person_info(person, url):
         ontology.add((person, birthDate_edge, dob))
     except Exception as e:
         print(e)
-        print("\n** Area collection Error: " + str(country) + " **\n")
+        print("\n** Person collection Error: " + str(person) + " **\n")
         exit()
         pass
 

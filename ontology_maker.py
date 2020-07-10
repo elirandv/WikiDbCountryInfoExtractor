@@ -165,8 +165,8 @@ def get_capitol(infobox, country):
         ontology.add((country, capitol_edge, capitol))
 
     except Exception as e:
-        print("\n** Capitol collection Error: "+str(country)+" **\n")
-        print(e)
+        # print("\n** Capitol collection Error: "+str(country)+" **\n")
+        # print(e)
         pass
 
 

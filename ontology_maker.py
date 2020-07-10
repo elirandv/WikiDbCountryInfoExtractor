@@ -155,9 +155,45 @@ def get_person_info(person, url):
     return
 
 
+def get_pres(infobox, country):
+    try:
+        pres = infobox.xpath(".//a[text() = 'President']/../../following-sibling::td//a/@href")[0]
+        president = clean_string(pres)
+        pres_link = wiki_prefix + pres
+
+        # print(president + "\t" + pres_link)
+        president = add_to_onto(president)
+        ontology.add((country, president_edge, president))
+
+        get_person_info(president, pres_link)
+    except Exception:
+        pass
+
+
+def get_pm(infobox, country):
+    global times
+    try:
+        pm = infobox.xpath(".//a[text() = 'Prime Minister']/../../following-sibling::td//a/@href")[0]
+        prime_m = clean_string(pm)
+        pm_link = wiki_prefix + pm
+
+        print(prime_m + "\t" + pm_link)
+        prime_m = add_to_onto(prime_m)
+        ontology.add((country, prime_minister_edge, prime_m))
+
+        get_person_info(prime_m, pm_link)
+    except Exception as e:
+        print(e)
+        print("\nError\n")
+        if times > 2:
+            exit()
+        else:
+            times+=1
+        # pass
+
+
 times = 0
 def get_country_info(country, url):
-    global times
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
@@ -167,40 +203,13 @@ def get_country_info(country, url):
     # government
     # capital
     # it's possible to get more than one infobox, in that case, check all of them
-    success = 1 #len(infoboxlist)
     #for i in range(len(infoboxlist)):
-    try:
-        # president
-        pres = infoboxlist[0].xpath(".//a[text() = 'President']/../../following-sibling::td//a")[0]
-        president = clean_string(pres.xpath("./@href")[0])
-        pres_link = wiki_prefix + pres.xpath("./@href")[0]
+    # president
+    get_pres(infoboxlist[0], country)
+    # prime minister
+    get_pm(infoboxlist[0], country)
 
-        # print(president + "\t" + pres_link)
-        president = add_to_onto(president)
-        ontology.add((country, president_edge, president))
-        get_person_info(president, pres_link)
-    except Exception:
-        pass
-    try:
-        # prime minister
-        pres = infoboxlist[0].xpath(".//a[text() = 'President']/../../following-sibling::td//a")[0]
-        president = clean_string(pres.xpath("./@href")[0])
-        pres_link = wiki_prefix + pres.xpath("./@href")[0]
-
-        print(president + "\t" + pres_link)
-        president = add_to_onto(president)
-        ontology.add((country, president_edge, president))
-        get_person_info(president, pres_link)
-    except Exception as e:
-        print(e)
-        print("\nError\n")
-        success-=1
-        if times > 10:
-            exit()
-        else:
-            times+=1
-        # pass
-    return success
+    return 1
 
 
 def get_countries(url):
@@ -219,7 +228,8 @@ def get_countries(url):
             country = clean_string(countrylist[i].xpath("./@href")[0])
             url = wiki_prefix + countrylist[i].xpath("./@href")[0]
             res[country] = url
-        except:
+        except Exception as e:
+            print(e)
             print("error")
             exit()
             continue

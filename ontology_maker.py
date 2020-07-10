@@ -48,10 +48,10 @@ def get_person_info(person, url):
     # infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     try:
         # date of birth
-        b = doc.xpath("//table//th[contains(text(), 'Date of birth')]")
-        date = b[0].xpath("./../td//span[@class='bday']//text()")[0]
+        date = doc.xpath("//*[@class='bday']/text()")[0]
         date = clean_string(date)
 
+        print(str(person)+"\tDate="+date)
         dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
         ontology.add((person, birthDate_edge, dob))
     except Exception as e:

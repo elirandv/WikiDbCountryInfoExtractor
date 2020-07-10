@@ -97,7 +97,7 @@ def get_pres(infobox, country):
 
         get_person_info(president, pres_link)
     except Exception:
-        # print("\n** President collection Error: "+country+" **\n")
+        # print("\n** President collection Error: "+str(country)+" **\n")
         # print(e)
         pass
 
@@ -114,7 +114,7 @@ def get_pm(infobox, country):
         get_person_info(prime_m, pm_link)
 
     except Exception as e:
-        # print("\n** Prime Minister collection Error: "+country+" **\n")
+        # print("\n** Prime Minister collection Error: "+str(country)+" **\n")
         # print(e)
         pass
 
@@ -133,9 +133,8 @@ def get_government(infobox, country):
         government = add_to_onto(government)
         ontology.add((country, government_edge, government))
 
-    except Exception as e:
-        print(e)
-        print("\n** Government collection Error: " + country + " **\n")
+    except Exception:
+        print("\n** Government collection Error: " + str(country) + " **\n")
         # exit()
         pass
     if "republic" in government or "Republic" in government:
@@ -156,7 +155,7 @@ def get_area(infobox, country):
 
     except Exception as e:
         print(e)
-        print("\n** Area collection Error: " + country + " **\n")
+        print("\n** Area collection Error: " + str(country) + " **\n")
         exit()
         # pass
 
@@ -173,7 +172,7 @@ def get_pop(infobox, country):
 
     except Exception as e:
         print(e)
-        print("\n** Population collection Error: " + country + " **\n")
+        print("\n** Population collection Error: " + str(country) + " **\n")
         exit()
         # pass
 
@@ -191,7 +190,7 @@ def get_capitol(infobox, country):
 
         get_person_info(capitol, cap_link)
     except Exception:
-        print("\n** Capitol collection Error: "+country+" **\n")
+        print("\n** Capitol collection Error: "+str(country)+" **\n")
         print(e)
         pass
 
@@ -216,7 +215,7 @@ def get_country_info(country, url):
     # population
     # get_pop(infoboxlist[0], country)
     # capital
-    get_capitol(infoboxlist[0], country)
+    #get_capitol(infoboxlist[0], country)
     return 1
 
 

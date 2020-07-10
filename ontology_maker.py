@@ -97,7 +97,7 @@ def get_pres(infobox, country):
 
         get_person_info(president, pres_link)
     except Exception:
-        # print("\n** President collection Error: "+country+" **\n")
+        # print("\n** President collection Error: "+str(country)+" **\n")
         # print(e)
         pass
 
@@ -114,7 +114,7 @@ def get_pm(infobox, country):
         get_person_info(prime_m, pm_link)
 
     except Exception as e:
-        # print("\n** Prime Minister collection Error: "+country+" **\n")
+        # print("\n** Prime Minister collection Error: "+str(country)+" **\n")
         # print(e)
         pass
 
@@ -133,9 +133,8 @@ def get_government(infobox, country):
         government = add_to_onto(government)
         ontology.add((country, government_edge, government))
 
-    except Exception as e:
-        print(e)
-        print("\n** Government collection Error: " + country + " **\n")
+    except Exception:
+        print("\n** Government collection Error: " + str(country) + " **\n")
         # exit()
         pass
     if "republic" in government or "Republic" in government:
@@ -156,7 +155,7 @@ def get_area(infobox, country):
 
     except Exception as e:
         print(e)
-        print("\n** Area collection Error: " + country + " **\n")
+        print("\n** Area collection Error: " + str(country) + " **\n")
         exit()
         # pass
 
@@ -173,25 +172,24 @@ def get_pop(infobox, country):
 
     except Exception as e:
         print(e)
-        print("\n** Population collection Error: " + country + " **\n")
+        print("\n** Population collection Error: " + str(country) + " **\n")
         exit()
         # pass
 
 
 def get_capitol(infobox, country):
     try:
-        cap = infobox.xpath(".//tr/th/text()[contains(., 'Capital')]/../../td/a/@href")[0]
+        cap = infobox.xpath(".//tr/th/text()[contains(., 'Capital')]/../../td//a/@href")[0]
         capitol = clean_string(cap)
         cap_link = wiki_prefix + cap
 
-        print("\t" + country + ",\t" + capitol + ":\t" + cap_link)
+        print("\t" + str(country) + ",\t" + capitol + ":\t" + cap_link)
 
         capitol = add_to_onto(capitol)
         ontology.add((country, president_edge, capitol))
 
-        get_person_info(capitol, cap_link)
-    except Exception:
-        print("\n** Capitol collection Error: "+country+" **\n")
+    except Exception as e:
+        print("\n** Capitol collection Error: "+str(country)+" **\n")
         print(e)
         pass
 
@@ -210,7 +208,7 @@ def get_country_info(country, url):
     # prime minister
     # get_pm(infoboxlist[0], country)
     # government
-    get_government(infoboxlist[0], country)
+    # get_government(infoboxlist[0], country)
     # area
     # get_area(infoboxlist[0], country)
     # population

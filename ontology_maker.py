@@ -32,7 +32,7 @@ def clean_string(some_str):
 def handle_gvlist(strlist):
     res = ""
     for str in strlist:
-        if "[" or "]" in str:
+        if '[' in str or ']' in str:
             continue
         res += str
     return clean_string(res)
@@ -128,17 +128,22 @@ def get_government(infobox, country):
     try:
         gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()|.//th[contains(text(), "
                                "'Government')]/../td//text()")
-        # exit()
         government = handle_gvlist(gvlist)
+        if government == "":
+            raise ValueError('Government Not Found')
 
-        print("WTF"+government + "\t")
+        print(government + "\t")
         government = add_to_onto(government)
         ontology.add((country, government_edge, government))
 
     except Exception as e:
         print(e)
+<<<<<<< HEAD
         print("\n** Government collection Error: "+country+" **\n")
         exit()
+=======
+        print("\nError\n")
+>>>>>>> 6d59bdb4dbc85650db5213837fd49a0ee64637c9
         # pass
 
 

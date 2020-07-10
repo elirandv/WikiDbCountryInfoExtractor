@@ -98,28 +98,26 @@ def get_pres(infobox, country):
 
         get_person_info(president, pres_link)
     except Exception:
-        print("\n** President collection Error: "+country+" **\n")
-        print(e)
+        #print("\n** President collection Error: "+country+" **\n")
+        #print(e)
         pass
 
 
 def get_pm(infobox, country):
-    global times
     try:
         pm = infobox.xpath(".//a[text() = 'Prime Minister']/../../following-sibling::td//a/@href")[0]
         prime_m = clean_string(pm)
         pm_link = wiki_prefix + pm
 
-        print("\t" + prime_m + "\t" + pm_link)
+        # print("\t" + prime_m + "\t" + pm_link)
         prime_m = add_to_onto(prime_m)
         ontology.add((country, prime_minister_edge, prime_m))
-        times+=1
         get_person_info(prime_m, pm_link)
+
     except Exception as e:
-        print("\n** Prime Minister collection Error: "+country+" **\n")
-        print(e)
-        # pass
-    print(times)
+        #print("\n** Prime Minister collection Error: "+country+" **\n")
+        #print(e)
+        pass
 
 
 def get_government(infobox, country):
@@ -137,11 +135,21 @@ def get_government(infobox, country):
         ontology.add((country, government_edge, government))
 
     except Exception as e:
+        print(e)
+        print("\n** Government collection Error: " + country + " **\n")
+        # exit()
+        pass
+    if "republic" in government or "Republic" in government:
+        times_gvm_r += 1
+    if "monarchy" in government or "Monarchy" in government:
+        times_gvm_m += 1
+    print("times_gvm_r=" + str(times_gvm_r) + "\t" + "times_gvm_m=" + str(times_gvm_r))
 
 
 def get_area(infobox, country):
     try:
-        a = infobox.xpath("(.//a[contains(text(), 'Area')]/../../following-sibling::tr//td//text())[1]|(.//th[contains(text(), 'Area')]/../following-sibling::tr//td//text())[1] ")[0]
+        a = infobox.xpath("(.//a[contains(text(), 'Area')]/../../following-sibling::tr//td//text())[1]|(.//th["
+                          "contains(text(), 'Area')]/../following-sibling::tr//td//text())[1] ")[0]
         area = clean_string(a)
 
         #print("\n\tArea="+area)
@@ -157,7 +165,8 @@ def get_area(infobox, country):
 
 def get_pop(infobox, country):
     try:
-        p = infobox.xpath("(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[1]|(.//th[contains(text(), 'Population')]/../following-sibling::tr//td//text())[1]")[0]
+        p = infobox.xpath("(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[1]|(.//th["
+                          "contains(text(), 'Population')]/../following-sibling::tr//td//text())[1]")[0]
         population = clean_string(p)
 
         #print("\n\tPopulation="+population)
@@ -171,7 +180,6 @@ def get_pop(infobox, country):
         # pass
 
 
-times = 0
 times_gvm_m = 0
 times_gvm_r = 0
 def get_country_info(country, url):

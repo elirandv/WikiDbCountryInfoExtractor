@@ -45,17 +45,20 @@ def get_person_info(person, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
-    infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
+    # infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     try:
         # date of birth
-        b = infoboxlist[0].xpath("//table//th[contains(text(), 'Date of birth')]")
+        b = doc.xpath("//table//th[contains(text(), 'Date of birth')]")
         date = b[0].xpath("./../td//span[@class='bday']//text()")[0]
         date = clean_string(date)
+
         dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
-        ontology.add((player, birthDate_edge, dob))
-    except:
+        ontology.add((person, birthDate_edge, dob))
+    except Exception as e:
+        print(e)
+        print("\n** Area collection Error: " + str(country) + " **\n")
+        exit()
         pass
-    return
 
 
 def get_pres(infobox, country):
@@ -69,7 +72,7 @@ def get_pres(infobox, country):
         ontology.add((country, president_edge, president))
 
         get_person_info(president, pres_link)
-    except Exception:
+    except Exception as e:
         # print("\n** President collection Error: "+str(country)+" **\n")
         # print(e)
         pass
@@ -179,7 +182,7 @@ def get_country_info(country, url):
     # president
     get_pres(infoboxlist[0], country)
     # prime minister
-    # get_pm(infoboxlist[0], country)
+    get_pm(infoboxlist[0], country)
     # government
     # get_government(infoboxlist[0], country)
     # area
@@ -187,7 +190,7 @@ def get_country_info(country, url):
     # population
     # get_pop(infoboxlist[0], country)
     # capital
-    get_capitol(infoboxlist[0], country)
+    # get_capitol(infoboxlist[0], country)
     return 1
 
 

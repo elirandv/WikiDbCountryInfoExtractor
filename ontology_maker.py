@@ -2,7 +2,6 @@ import requests
 import lxml.html
 import rdflib
 
-
 wiki_prefix = "http://en.wikipedia.org"
 example_prefix = "http://example.org/"
 
@@ -82,7 +81,7 @@ def add_to_onto(str):
 
 
 def get_person_info(person, url):
-    #dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
+    # dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
     return
 
 
@@ -98,8 +97,8 @@ def get_pres(infobox, country):
 
         get_person_info(president, pres_link)
     except Exception:
-        #print("\n** President collection Error: "+country+" **\n")
-        #print(e)
+        # print("\n** President collection Error: "+country+" **\n")
+        # print(e)
         pass
 
 
@@ -115,8 +114,8 @@ def get_pm(infobox, country):
         get_person_info(prime_m, pm_link)
 
     except Exception as e:
-        #print("\n** Prime Minister collection Error: "+country+" **\n")
-        #print(e)
+        # print("\n** Prime Minister collection Error: "+country+" **\n")
+        # print(e)
         pass
 
 
@@ -151,13 +150,13 @@ def get_area(infobox, country):
                           "contains(text(), 'Area')]/../following-sibling::tr//td//text())[1] ")[0]
         area = clean_string(a)
 
-        #print("\n\tArea="+area)
+        # print("\n\tArea="+area)
         area = add_to_onto(area)
         ontology.add((country, area_edge, area))
 
     except Exception as e:
         print(e)
-        print("\n** Area collection Error: "+country+" **\n")
+        print("\n** Area collection Error: " + country + " **\n")
         exit()
         # pass
 
@@ -168,19 +167,21 @@ def get_pop(infobox, country):
                           "contains(text(), 'Population')]/../following-sibling::tr//td//text())[1]")[0]
         population = clean_string(p)
 
-        #print("\n\tPopulation="+population)
+        # print("\n\tPopulation="+population)
         population = add_to_onto(population)
         ontology.add((country, population_edge, population))
 
     except Exception as e:
         print(e)
-        print("\n** Population collection Error: "+country+" **\n")
+        print("\n** Population collection Error: " + country + " **\n")
         exit()
         # pass
 
 
 times_gvm_m = 0
 times_gvm_r = 0
+
+
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
@@ -188,17 +189,17 @@ def get_country_info(country, url):
     infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     # capital
     # it's possible to get more than one infobox, in that case, check all of them
-    #for i in range(len(infoboxlist)):
+    # for i in range(len(infoboxlist)):
     # president
-    #get_pres(infoboxlist[0], country)
+    # get_pres(infoboxlist[0], country)
     # prime minister
-    #get_pm(infoboxlist[0], country)
+    # get_pm(infoboxlist[0], country)
     # government
     get_government(infoboxlist[0], country)
     # area
-    #get_area(infoboxlist[0], country)
+    # get_area(infoboxlist[0], country)
     # population
-    #get_pop(infoboxlist[0], country)
+    # get_pop(infoboxlist[0], country)
     return 1
 
 
@@ -233,20 +234,14 @@ def make_ontology(url):
     res = 0
     for country in country_dict:
         url = country_dict[country]
-        #print("\nCountry#" + str(i))
-        #print("\t"+country + "\t" + url)
+        # print("\nCountry#" + str(i))
+        # print("\t"+country + "\t" + url)
 
         rdf_c = add_to_onto(country)
         res += get_country_info(rdf_c, url)
         i += 1
-<<<<<<< HEAD
     print("Countries count in Ontology=" + str(res))
     print("times_gvm_r=" + str(times_gvm_r) + "\t" + "times_gvm_m=" + str(times_gvm_m))
-=======
-        # if i == 6:
-        #     break
-    print("Countries count in ontology.nt :" + str(res))
->>>>>>> 33083d7f433c8b8a7cfd4e009fefc78baf0da4cc
 
 
 if __name__ == '__main__':

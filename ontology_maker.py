@@ -180,12 +180,12 @@ def get_pm(infobox, country):
         print("\t" + prime_m + "\t" + pm_link)
         prime_m = add_to_onto(prime_m)
         ontology.add((country, prime_minister_edge, prime_m))
-
+        times+=1
         get_person_info(prime_m, pm_link)
     except Exception as e:
         print("\t-- get_pm Error: --")
         print(e)
-    times+=1
+    
     print(times)
         # if times > 4:
             # exit()

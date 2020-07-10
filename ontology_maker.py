@@ -98,6 +98,8 @@ def get_pres(infobox, country):
 
         get_person_info(president, pres_link)
     except Exception:
+        print("\n** President collection Error: "+country+" **\n")
+        print(e)
         pass
 
 
@@ -114,7 +116,7 @@ def get_pm(infobox, country):
         times+=1
         get_person_info(prime_m, pm_link)
     except Exception as e:
-        print("\t-- get_pm Error: --")
+        print("\n** Prime Minister collection Error: "+country+" **\n")
         print(e)
         # pass
     print(times)
@@ -135,42 +137,48 @@ def get_government(infobox, country):
         ontology.add((country, government_edge, government))
 
     except Exception as e:
+<<<<<<< HEAD
         pass
     if "republic" in government or "Republic" in government:
         times_gvm_r+=1
     if "monarchy" in government or "Monarchy" in government:
         times_gvm_m+=1
     print("times_gvm_r="+ str(times_gvm_r)+ "\t" + "times_gvm_m=" + str(times_gvm_r))
+=======
+        print(e)
+        print("\n** Government collection Error: "+country+" **\n")
+        exit()
+>>>>>>> fd34ccacefe6e92d6fe41a28a8f945f27ffde768
 
 
 def get_area(infobox, country):
     try:
-        a = infobox.xpath(" ")[0]
+        a = infobox.xpath("(.//a[contains(text(), 'Area')]/../../following-sibling::tr//td//text())[1]|(.//th[contains(text(), 'Area')]/../following-sibling::tr//td//text())[1] ")[0]
         area = clean_string(a)
 
-        print(area + "\t")
+        #print("\n\tArea="+area)
         area = add_to_onto(area)
         ontology.add((country, area_edge, area))
 
     except Exception as e:
         print(e)
-        print("\nError\n")
+        print("\n** Area collection Error: "+country+" **\n")
         exit()
         # pass
 
 
 def get_pop(infobox, country):
     try:
-        p = infobox.xpath(" ")[0]
+        p = infobox.xpath("(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[1]|(.//th[contains(text(), 'Population')]/../following-sibling::tr//td//text())[1]")[0]
         population = clean_string(p)
 
-        print(population + "\t")
+        #print("\n\tPopulation="+population)
         population = add_to_onto(population)
         ontology.add((country, population_edge, population))
 
     except Exception as e:
         print(e)
-        print("\nError\n")
+        print("\n** Population collection Error: "+country+" **\n")
         exit()
         # pass
 
@@ -191,11 +199,11 @@ def get_country_info(country, url):
     # prime minister
     #get_pm(infoboxlist[0], country)
     # government
-    get_government(infoboxlist[0], country)
+    #get_government(infoboxlist[0], country)
     # area
-    #get_area(infoboxlist[0], country)
+    get_area(infoboxlist[0], country)
     # population
-    #get_pop(infoboxlist[0], country)
+    get_pop(infoboxlist[0], country)
     return 1
 
 
@@ -230,15 +238,15 @@ def make_ontology(url):
     res = 0
     for country in country_dict:
         url = country_dict[country]
-        print("\nCountry#" + str(i))
-        print("\t"+country + "\t" + url)
+        #print("\nCountry#" + str(i))
+        #print("\t"+country + "\t" + url)
 
         rdf_c = add_to_onto(country)
         res += get_country_info(rdf_c, url)
         i += 1
         # if i == 6:
         #     break
-    print("final res=" + str(res))
+    print("Countries count in Ontology=" + str(res))
 
 
 if __name__ == '__main__':

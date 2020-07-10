@@ -194,6 +194,28 @@ def get_pm(infobox, country):
         # pass
 
 
+def get_government(infobox, country):
+    global times
+    try:
+        gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()")
+        print(gvlist)
+        exit()
+        government = clean_string(gv)
+
+        print(government + "\t")
+        government = add_to_onto(government)
+        ontology.add((country, government_edge, government))
+
+    except Exception as e:
+        print(e)
+        print("\nError\n")
+        if times > 4:
+            exit()
+        else:
+            times+=1
+        # pass
+
+
 times = 0
 def get_country_info(country, url):
     res = requests.get(url)
@@ -202,7 +224,6 @@ def get_country_info(country, url):
     infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     # population
     # area
-    # government
     # capital
     # it's possible to get more than one infobox, in that case, check all of them
     #for i in range(len(infoboxlist)):
@@ -210,7 +231,8 @@ def get_country_info(country, url):
     get_pres(infoboxlist[0], country)
     # prime minister
     get_pm(infoboxlist[0], country)
-
+    # government
+    get_government(infobox, country)
     return 1
 
 

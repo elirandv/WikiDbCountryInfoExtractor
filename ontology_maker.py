@@ -24,6 +24,8 @@ birthDate_edge = rdflib.URIRef(wiki_prefix + "/birthDate")
 # aux func
 def clean_string(some_str):
     # some_str = "".join(some_str.splitlines())
+    if some_str.startswith('/wiki/'):
+        some_str = some_str[6:]
     return some_str.strip().replace("\n", "").replace(" ", "_")
 
 
@@ -149,9 +151,11 @@ def add_to_onto(str):
 
 
 def get_person_info(person, url):
-    dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
+    #dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
+    return
 
 
+times = 0
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
@@ -163,21 +167,29 @@ def get_country_info(country, url):
     # government
     # capital
     # it's possible to get more than one infobox, in that case, check all of them
-    for i in range(len(infoboxlist)):
-        try:
-            # president
-            pres = infoboxlist[i].xpath(".//a[contains(text(), 'President')]/../td[1]/span/a")
-            president = clean_string(pres.xpath("./@title")[0])
-            pres_link = wiki_prefix + pres.xpath("./@href")[0]
+    success = 1 #len(infoboxlist)
+    global times
+    #for i in range(len(infoboxlist)):
+    try:
+        # president
+        pres = infoboxlist[0].xpath(".//a[text() = 'President']/../../following-sibling::td//a")[0]
+        president = clean_string(pres.xpath("./@href")[0])
+        pres_link = wiki_prefix + pres.xpath("./@href")[0]
 
-            president = add_to_onto(president)
-            ontology.add((country, president_edge_edge, president))
-            get_person_info(president ,pres_link)
-        except:
-            print("Error")
+        print(president + "\t" + pres_link)
+        president = add_to_onto(president)
+        ontology.add((country, president_edge, president))
+        get_person_info(president, pres_link)
+    except Exception as e:
+        print(e)
+        print("\nError\n")
+        success-=1
+        if times > 5:
             exit()
-            # pass
-    exit()
+        else:
+            times+=1
+        # pass
+    return success
 
 
 def get_countries(url):
@@ -206,14 +218,18 @@ def make_ontology(url):
     # get dict of countries and links to wikipages
     country_dict = get_countries(url)
     i = 1
+    res = 0
     for country in country_dict:
         url = country_dict[country]
         print("country#" + str(i))
         print(country + "\t" + url)
+
+        rdf_c = add_to_onto(country)
+        res += get_country_info(rdf_c, url)
         i += 1
-        if i == 3:
-            rdf_c = add_to_onto(country)
-            get_country_info(rdf_c, url)
+        # if i == 6:
+        #     break
+    print("final res=" + str(res))
 
 
 if __name__ == '__main__':

@@ -68,84 +68,6 @@ def get_player_info(url, player):
         pass
 
 
-def get_city_info(url, city):
-    res = requests.get(url)
-    doc = lxml.html.fromstring(res.content)
-
-    try:
-        wiki_infobox = doc.xpath("//table[contains(@class, 'infobox')]")[0]
-        country = wiki_infobox.xpath("//table//th[contains(.,'country')] | //table//th[contains(.,'Country')]")
-
-        try:
-            country_str = country[0].xpath("./../td//a//text()")[0].replace(" ", "_")
-        except IndexError:
-            country_str = country[0].xpath("./../td//text()")[0].replace(" ", "_")
-
-    except IndexError:
-        return None
-    country = rdflib.URIRef(example_prefix + country_str)
-    ontology.add((city, located_in_edge, country))
-    return country
-
-
-def get_team_info(url, team):
-    res = requests.get(url)
-    doc = lxml.html.fromstring(res.content)
-    playerTable = doc.xpath(
-        "(//table[.//th/text()[contains(., 'Position')] and .//th/text()[contains(., 'Player')]])[not(position("
-        ")>3)]/tbody/tr")
-
-    for i in range(1, len(playerTable)):
-        try:
-            row = playerTable[i].xpath(".//text()")
-            new_row = [x for x in row if x != '\n']
-
-            player_str = clean_string(new_row[2])
-            player = rdflib.URIRef(example_prefix + player_str)
-            player_url = wiki_prefix + playerTable[i].xpath(".//@href")[2]
-
-            if team is not None:
-                ontology.add((player, playsFor_edge, team))
-            get_player_info(player_url, player)
-        except IndexError:
-            continue
-
-
-def get_league_info(url):
-    res = requests.get(url)
-    doc = lxml.html.fromstring(res.content)
-    teamTable = doc.xpath(
-        "//table[.//th/text() [contains(., 'Team')] and .//th/text() [contains(., 'Location')]]/tbody/tr")
-
-    league_name = doc.xpath("//h1[@id='firstHeading']/text()")[0].replace(" ", "_")
-    league = rdflib.URIRef(example_prefix + league_name)
-
-    for i in range(1, len(teamTable)):
-        try:
-            print("team#" + str(i))
-            row = teamTable[i].xpath(".//text()")
-            new_row = [x for x in row if x != '\n']
-
-            team_str = clean_string(new_row[0])
-            team = rdflib.URIRef(example_prefix + team_str)
-            team_url = wiki_prefix + teamTable[i].xpath(".//td[1]//@href")[0]
-
-            city_str = clean_string(new_row[1])
-            city = rdflib.URIRef(example_prefix + city_str)
-            city_url = wiki_prefix + teamTable[i].xpath(".//td[2]//@href")[0]
-
-            ontology.add((team, league_edge, league))
-            ontology.add((team, homeCity_edge, city))
-            # country is a URIref or None
-            country = get_city_info(city_url, city)
-            get_team_info(team_url, team)
-            # maybe add different countries to the same league, that is ok
-            if country is not None:
-                ontology.add((league, country_edge, country))
-        except IndexError:
-            continue
-
-
 def add_to_onto(str):
     return rdflib.URIRef(wiki_prefix + "/" + str)
 
@@ -185,22 +107,18 @@ def get_pm(infobox, country):
     except Exception as e:
         print("\t-- get_pm Error: --")
         print(e)
-    
-    print(times)
-        # if times > 4:
-            # exit()
-        # else:
-            # times+=1
         # pass
+    print(times)
 
 
 def get_government(infobox, country):
-    global times
+    global times_gvm_m
+    global times_gvm_r
     try:
         gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()|.//th[contains(text(), 'Government')]/../td//text()")
         print(gvlist)
-        exit()
-        government = clean_string(gv)
+        # exit()
+        government = clean_string(gvlist[0])
 
         print(government + "\t")
         government = add_to_onto(government)
@@ -209,14 +127,13 @@ def get_government(infobox, country):
     except Exception as e:
         print(e)
         print("\nError\n")
-        if times > 4:
-            exit()
-        else:
-            times+=1
+        exit()
         # pass
 
 
 times = 0
+times_gvm_m = 0
+times_gvm_r = 0
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
@@ -228,11 +145,11 @@ def get_country_info(country, url):
     # it's possible to get more than one infobox, in that case, check all of them
     #for i in range(len(infoboxlist)):
     # president
-    get_pres(infoboxlist[0], country)
+    #get_pres(infoboxlist[0], country)
     # prime minister
-    get_pm(infoboxlist[0], country)
+    #get_pm(infoboxlist[0], country)
     # government
-    #get_government(infobox, country)
+    get_government(infoboxlist[0], country)
     return 1
 
 

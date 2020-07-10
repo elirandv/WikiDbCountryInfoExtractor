@@ -77,7 +77,7 @@ def get_player_info(url, player):
 
 
 def add_to_onto(str):
-    return rdflib.URIRef(wiki_prefix + "/" + str)
+    return rdflib.URIRef(wiki_prefix + "/wiki/" + str)
 
 
 def get_person_info(person, url):

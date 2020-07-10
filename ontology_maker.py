@@ -37,51 +37,24 @@ def handle_gvlist(strlist):
     return clean_string(res)
 
 
-def get_player_info(url, player):
+def add_to_onto(str):
+    return rdflib.URIRef(wiki_prefix + "/wiki/" + str)
+
+
+def get_person_info(person, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
-    wiki_infobox = doc.xpath("//table[contains(@class, 'infobox')]")
+    infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     try:
         # date of birth
-        b = wiki_infobox[0].xpath("//table//th[contains(text(), 'Date of birth')]")
+        b = infoboxlist[0].xpath("//table//th[contains(text(), 'Date of birth')]")
         date = b[0].xpath("./../td//span[@class='bday']//text()")[0]
         date = clean_string(date)
         dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
         ontology.add((player, birthDate_edge, dob))
     except:
         pass
-    try:
-        # place of birth
-        c = wiki_infobox[0].xpath("//table//th[contains(text(), 'Place of birth')]")
-        pob_str = c[0].xpath("./../td//a/text()")[0]
-        pob_str = clean_string(pob_str)
-        pob = rdflib.URIRef(example_prefix + pob_str)
-        ontology.add((player, birthPlace_edge, pob))
-        try:
-            pob_link = wiki_prefix + c[0].xpath("./../td//a/@href")[0]
-            get_city_info(pob_link, pob)
-        except:
-            pass
-    except:
-        pass
-    try:
-        # player position
-        d = wiki_infobox[0].xpath("//table//th[contains(text(), 'Playing position')]")
-        str_pos = d[0].xpath("./../td//a/text()")[0].replace(" ", "_")
-        str_pos = clean_string(str_pos)
-        player_pos = rdflib.URIRef(example_prefix + str_pos)
-        ontology.add((player, position_edge, player_pos))
-    except:
-        pass
-
-
-def add_to_onto(str):
-    return rdflib.URIRef(wiki_prefix + "/wiki/" + str)
-
-
-def get_person_info(person, url):
-    # dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
     return
 
 
@@ -186,7 +159,7 @@ def get_capitol(infobox, country):
         #print("\t" + str(country) + ",\t" + capitol + ":\t" + cap_link)
 
         capitol = add_to_onto(capitol)
-        ontology.add((country, president_edge, capitol))
+        ontology.add((country, capitol_edge, capitol))
 
     except Exception as e:
         print("\n** Capitol collection Error: "+str(country)+" **\n")
@@ -204,7 +177,7 @@ def get_country_info(country, url):
     # it's possible to get more than one infobox, in that case, check all of them
     # for i in range(len(infoboxlist)):
     # president
-    # get_pres(infoboxlist[0], country)
+    get_pres(infoboxlist[0], country)
     # prime minister
     # get_pm(infoboxlist[0], country)
     # government

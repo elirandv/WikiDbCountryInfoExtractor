@@ -189,9 +189,9 @@ def get_pm(infobox, country):
     print(times)
 
 
-
 def get_government(infobox, country):
-    global times
+    global times_gvm_m
+    global times_gvm_r
     try:
         gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()")
         print(gvlist)
@@ -205,14 +205,13 @@ def get_government(infobox, country):
     except Exception as e:
         print(e)
         print("\nError\n")
-        if times > 4:
-            exit()
-        else:
-            times+=1
+        exit()
         # pass
 
 
 times = 0
+times_gvm_m = 0
+times_gvm_r = 0
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
@@ -228,7 +227,7 @@ def get_country_info(country, url):
     # prime minister
     get_pm(infoboxlist[0], country)
     # government
-    get_government(infobox, country)
+    get_government(infoboxlist[0], country)
     return 1
 
 

@@ -237,7 +237,7 @@ def make_ontology(url):
         i += 1
         # if i == 6:
         #     break
-    print("Countries count in Ontology=" + str(res))
+    print("Countries count in ontology.nt :" + str(res))
 
 
 if __name__ == '__main__':

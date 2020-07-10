@@ -178,16 +178,31 @@ def get_pop(infobox, country):
         # pass
 
 
+def get_capitol(infobox, country):
+    try:
+        cap = infobox.xpath(".//tr/th/text()[contains(., 'Capital')]/../../td/a/@href")[0]
+        capitol = clean_string(cap)
+        cap_link = wiki_prefix + cap
+
+        print("\t" + country + ",\t" + capitol + ":\t" + cap_link)
+
+        capitol = add_to_onto(capitol)
+        ontology.add((country, president_edge, capitol))
+
+        get_person_info(capitol, cap_link)
+    except Exception:
+        print("\n** Capitol collection Error: "+country+" **\n")
+        print(e)
+        pass
+
+
 times_gvm_m = 0
 times_gvm_r = 0
-
-
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
     infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
-    # capital
     # it's possible to get more than one infobox, in that case, check all of them
     # for i in range(len(infoboxlist)):
     # president
@@ -200,6 +215,8 @@ def get_country_info(country, url):
     # get_area(infoboxlist[0], country)
     # population
     # get_pop(infoboxlist[0], country)
+    # capital
+    get_capitol(infoboxlist[0], country)
     return 1
 
 

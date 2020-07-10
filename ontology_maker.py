@@ -185,13 +185,9 @@ def get_pm(infobox, country):
     except Exception as e:
         print("\t-- get_pm Error: --")
         print(e)
-    
-    print(times)
-        # if times > 4:
-            # exit()
-        # else:
-            # times+=1
         # pass
+    print(times)
+
 
 
 def get_government(infobox, country):

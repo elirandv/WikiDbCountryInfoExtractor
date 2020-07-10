@@ -197,7 +197,7 @@ def get_pm(infobox, country):
 def get_government(infobox, country):
     global times
     try:
-        gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()")
+        gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()|.//th[contains(text(), 'Government')]/../td//text()")
         print(gvlist)
         exit()
         government = clean_string(gv)
@@ -232,7 +232,7 @@ def get_country_info(country, url):
     # prime minister
     get_pm(infoboxlist[0], country)
     # government
-    get_government(infobox, country)
+    #get_government(infobox, country)
     return 1
 
 

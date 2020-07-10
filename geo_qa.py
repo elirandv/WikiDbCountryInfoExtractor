@@ -6,7 +6,7 @@ from ontology_maker import make_ontology
 if __name__ == '__main__':
     command=sys.argv[1]
     if (command=="create"):  
-        print("Createing ontology...")
+        print("WikiDb Country Info Extractor Createing ontology...")
         make_ontology("https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)")
         print("Ontology.nt was added")
     elif command=="question":

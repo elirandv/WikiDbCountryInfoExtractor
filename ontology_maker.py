@@ -239,8 +239,14 @@ def make_ontology(url):
         rdf_c = add_to_onto(country)
         res += get_country_info(rdf_c, url)
         i += 1
+<<<<<<< HEAD
     print("Countries count in Ontology=" + str(res))
     print("times_gvm_r=" + str(times_gvm_r) + "\t" + "times_gvm_m=" + str(times_gvm_m))
+=======
+        # if i == 6:
+        #     break
+    print("Countries count in ontology.nt :" + str(res))
+>>>>>>> 33083d7f433c8b8a7cfd4e009fefc78baf0da4cc
 
 
 if __name__ == '__main__':

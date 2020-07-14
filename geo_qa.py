@@ -1,9 +1,10 @@
 import sys
 from ontology_maker import make_ontology
 #from parser import parse
-#from sparQL import get_query
+from sparQL import get_query
 
 if __name__ == '__main__':
+    wiki_prefix = "http://en.wikipedia.org"
     if len(sys.argv)==1:
         print("Illegal command, please try 'create' or 'question'.")
         exit(0)
@@ -18,9 +19,9 @@ if __name__ == '__main__':
         # query = parser(sys.argv[2])
         
         query = "select ?c where { " \
-            " ?c <"+prefix+"catpital> <"+prefix+"Central_African_Republic>} "
+            " ?c <"+wiki_prefix+"catpital> <"+wiki_prefix+"Central_African_Republic>} "
             
-        # get_query(query, "ontology.nt")
+        get_query(query, "ontology.nt")
         print("???")
         print("WikiDb Country Info Extractor command done.")
     else:

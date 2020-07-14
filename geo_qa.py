@@ -1,31 +1,41 @@
 import sys
-from ontology_maker import make_ontology
-
-# from parser import parse
+from ontology_maker import call_maker
+from parser import parse
 # from sparQL import get_query
+
+
+def invalid_command():
+    print("Illegal command, please try 'create ontology.nt' or 'question <string>'.")
+    exit(0)
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        print("Illegal command, please try 'create' or 'question'.")
-        exit(0)
+        invalid_command()
+
     command = sys.argv[1]
     if command == "create":
+
+        if sys.argv[1] != "ontology.nt":
+            invalid_command()
+
         print("WikiDb Country Info Extractor Creating ontology...")
-        make_ontology("https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)")
-        print("Ontology.nt was added")
+        call_maker()
+
         print("WikiDb Country Info Extractor command done.")
     elif command == "question":
 
-        # query = parser(sys.argv[2])
+        sentence = []
+        for i in range(2, len(sys.argv)):
+            sentence.append(sys.argv[i])
+
+        query = parse(sentence)
 
         query = "select ?c where { " \
-                " ?c <" + prefix + "catpital> <" + prefix + "Central_African_Republic>} "
+                " ?c <" + prefix + "capital> <" + prefix + "Central_African_Republic>} "
 
         # get_query(query, "ontology.nt")
         print("???")
         print("WikiDb Country Info Extractor command done.")
     else:
-        # (command!="create" or command!="question"):
-        print("Illegal command, please try 'create' or 'question'.")
-
-# can u see this change??????
+        invalid_command()

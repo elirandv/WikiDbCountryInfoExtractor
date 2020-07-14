@@ -155,8 +155,8 @@ def get_pop(infobox, country):
         ontology.add((country, population_edge, population))
 
     except Exception as e:
-        print(e)
-        print("\n** Population collection Error: " + str(country) + " **\n")
+        # print(e)
+        # print("\n** Population collection Error: " + str(country) + " **\n")
         # exit()
         pass
 

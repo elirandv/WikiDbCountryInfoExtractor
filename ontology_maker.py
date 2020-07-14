@@ -3,7 +3,6 @@ import lxml.html
 import rdflib
 
 wiki_prefix = "http://en.wikipedia.org"
-example_prefix = "http://example.org/"
 
 # i use global ontology for faster run time
 ontology = rdflib.Graph()
@@ -99,8 +98,6 @@ def get_pm(infobox, country):
 
 
 def get_government(infobox, country):
-    global times_gvm_m
-    global times_gvm_r
     try:
         gvlist = infobox.xpath(".//a[contains(text(), 'Government')]/../../td//text()|.//th[contains(text(), "
                                "'Government')]/../td//text()")
@@ -113,13 +110,9 @@ def get_government(infobox, country):
         ontology.add((country, government_edge, government))
 
     except Exception:
-        print("\n** Government collection Error: " + str(country) + " **\n")
+        # print("\n** Government collection Error: " + str(country) + " **\n")
         # exit()
         pass
-    if "republic" in government or "Republic" in government:
-        times_gvm_r += 1
-    if "monarchy" in government or "Monarchy" in government:
-        times_gvm_m += 1
 
 
 def clean_area(a):
@@ -145,8 +138,8 @@ def get_area(infobox, country):
         ontology.add((country, area_edge, area))
 
     except Exception as e:
-        print(e)
-        print("\n** Area collection Error: " + str(country) + " **\n")
+        # print(e)
+        # print("\n** Area collection Error: " + str(country) + " **\n")
         # exit()
         pass
 
@@ -185,17 +178,11 @@ def get_capitol(infobox, country):
         pass
 
 
-times_gvm_m = 0
-times_gvm_r = 0
-
-
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
     infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
-    # it's possible to get more than one infobox, in that case, check all of them
-    # for i in range(len(infoboxlist)):
     # president
     get_pres(infoboxlist[0], country)
     # prime minister
@@ -230,7 +217,7 @@ def get_countries(url):
         except Exception as e:
             print("\t-- get_countries Error: --")
             print(e)
-            exit()
+            # exit()
             continue
     return res
 
@@ -248,8 +235,7 @@ def make_ontology(url):
         rdf_c = add_to_onto(country)
         res += get_country_info(rdf_c, url)
         i += 1
-    print("Countries count in Ontology=" + str(res))
-    print("times_gvm_r=" + str(times_gvm_r) + "\t" + "times_gvm_m=" + str(times_gvm_m))
+    # print("Countries count in Ontology=" + str(res))
 
 
 if __name__ == '__main__':

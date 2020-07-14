@@ -45,7 +45,6 @@ def get_person_info(person, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
-    # infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     try:
         # date of birth
         try:
@@ -53,9 +52,6 @@ def get_person_info(person, url):
         except IndexError:
             date = doc.xpath("//*[./th/text()='Born']/td/text()")[0]
             if not any(char.isdigit() for char in date):
-                print("#####################################")
-                print(str(person) + "\t" + date)
-                print("#####################################")
                 return
         date = clean_string(date)
 
@@ -63,8 +59,8 @@ def get_person_info(person, url):
         dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
         ontology.add((person, birthDate_edge, dob))
     except Exception as e:
-        print(e)
-        print("\n** Person collection Error: " + str(person) + " **\n")
+        # print(e)
+        # print("\n** Person collection Error: " + str(person) + " **\n")
         pass
 
 

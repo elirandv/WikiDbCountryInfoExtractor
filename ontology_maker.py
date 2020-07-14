@@ -238,10 +238,19 @@ def make_ontology(url):
     # print("Countries count in Ontology=" + str(res))
 
 
+def call_maker():
+    print("running...")
+
+    make_ontology("https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)")
+    ontology.serialize("ontology.nt", format="nt")
+
+    print("ontology.nt was added")
+
+
 if __name__ == '__main__':
     print("running...")
 
     make_ontology("https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)")
     ontology.serialize("ontology.nt", format="nt")
 
-    print("done.")
+    print("ontology.nt was added")

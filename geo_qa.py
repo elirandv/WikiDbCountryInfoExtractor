@@ -10,7 +10,7 @@ if __name__ == '__main__':
         exit(0)
     command = sys.argv[1]
     if command == "create":
-        print("WikiDb Country Info Extractor Createing ontology...")
+        print("WikiDb Country Info Extractor Creating ontology...")
         make_ontology("https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)")
         print("Ontology.nt was added")
         print("WikiDb Country Info Extractor command done.")

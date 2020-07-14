@@ -53,6 +53,9 @@ def get_person_info(person, url):
         except IndexError:
             date = doc.xpath("//*[./th/text()='Born']/td/text()")[0]
             if not any(char.isdigit() for char in date):
+                print("#####################################")
+                print(str(person) + "\t" + date)
+                print("#####################################")
                 return
         date = clean_string(date)
 

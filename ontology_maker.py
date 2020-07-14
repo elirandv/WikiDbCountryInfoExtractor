@@ -55,7 +55,7 @@ def get_person_info(person, url):
                 return
         date = clean_string(date)
 
-        print(str(person)+"\t"+date)
+        # print(str(person) + "\t" + date)
         dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
         ontology.add((person, birthDate_edge, dob))
     except Exception as e:
@@ -121,32 +121,34 @@ def get_government(infobox, country):
     if "monarchy" in government or "Monarchy" in government:
         times_gvm_m += 1
 
+
 def clean_area(a):
     area = clean_string(a)
     words = area.split('\xa0')
     # print("\n\t** " + str(words))
-    if len(words)==1 or words[1]=="km":
-        area=words[0]+"_km2"
+    if len(words) == 1 or words[1] == "km":
+        area = words[0] + "_km2"
     else:
-        area=words[2].split('(')[1]+"_km2"
+        area = words[2].split('(')[1] + "_km2"
     return area
-    
+
+
 def get_area(infobox, country):
     try:
         a = infobox.xpath("(.//a[contains(text(), 'Area')]/../../following-sibling::tr//td//text())[1]|(.//th["
                           "contains(text(), 'Area')]/../following-sibling::tr//td//text())[1] ")[0]
         area = clean_area(a)
-        if str(country)=="https://en.wikipedia.org/wiki/Channel_Islands":
-            area="198 km\u00B2"
-        #print("\n\t** Area of " + str(country) + ": " + area )
+        if str(country) == "https://en.wikipedia.org/wiki/Channel_Islands":
+            area = "198 km\u00B2"
+        # print("\n\t** Area of " + str(country) + ": " + area )
         area = add_to_onto(area)
         ontology.add((country, area_edge, area))
 
     except Exception as e:
         print(e)
         print("\n** Area collection Error: " + str(country) + " **\n")
-        exit()
-        # pass
+        # exit()
+        pass
 
 
 def get_pop(infobox, country):
@@ -162,8 +164,8 @@ def get_pop(infobox, country):
     except Exception as e:
         print(e)
         print("\n** Population collection Error: " + str(country) + " **\n")
-        exit()
-        # pass
+        # exit()
+        pass
 
 
 def get_capitol(infobox, country):
@@ -172,7 +174,7 @@ def get_capitol(infobox, country):
         capitol = clean_string(cap)
         cap_link = wiki_prefix + cap
 
-        #print("\t" + str(country) + ",\t" + capitol + ":\t" + cap_link)
+        # print("\t" + str(country) + ",\t" + capitol + ":\t" + cap_link)
 
         capitol = add_to_onto(capitol)
         ontology.add((country, capitol_edge, capitol))
@@ -185,6 +187,8 @@ def get_capitol(infobox, country):
 
 times_gvm_m = 0
 times_gvm_r = 0
+
+
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
@@ -193,17 +197,17 @@ def get_country_info(country, url):
     # it's possible to get more than one infobox, in that case, check all of them
     # for i in range(len(infoboxlist)):
     # president
-    # get_pres(infoboxlist[0], country)
+    get_pres(infoboxlist[0], country)
     # prime minister
     get_pm(infoboxlist[0], country)
     # government
-    # get_government(infoboxlist[0], country)
+    get_government(infoboxlist[0], country)
     # area
     get_area(infoboxlist[0], country)
     # population
-    # get_pop(infoboxlist[0], country)
+    get_pop(infoboxlist[0], country)
     # capital
-    #get_capitol(infoboxlist[0], country)
+    get_capitol(infoboxlist[0], country)
     return 1
 
 

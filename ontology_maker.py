@@ -45,17 +45,27 @@ def get_person_info(person, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
 
-    infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
+    # infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     try:
         # date of birth
-        b = infoboxlist[0].xpath("//table//th[contains(text(), 'Date of birth')]")
-        date = b[0].xpath("./../td//span[@class='bday']//text()")[0]
+        try:
+            date = doc.xpath("//*[@class='bday']/text()")[0]
+        except IndexError:
+            date = doc.xpath("//*[./th/text()='Born']/td/text()")[0]
+            if not any(char.isdigit() for char in date):
+                print("#####################################")
+                print(str(person) + "\t" + date)
+                print("#####################################")
+                return
         date = clean_string(date)
+
+        print(str(person)+"\t"+date)
         dob = rdflib.Literal(date, datatype=rdflib.XSD.date)
-        ontology.add((player, birthDate_edge, dob))
-    except:
+        ontology.add((person, birthDate_edge, dob))
+    except Exception as e:
+        print(e)
+        print("\n** Person collection Error: " + str(person) + " **\n")
         pass
-    return
 
 
 def get_pres(infobox, country):
@@ -69,7 +79,7 @@ def get_pres(infobox, country):
         ontology.add((country, president_edge, president))
 
         get_person_info(president, pres_link)
-    except Exception:
+    except Exception as e:
         # print("\n** President collection Error: "+str(country)+" **\n")
         # print(e)
         pass
@@ -172,8 +182,8 @@ def get_capitol(infobox, country):
         ontology.add((country, capitol_edge, capitol))
 
     except Exception as e:
-        print("\n** Capitol collection Error: "+str(country)+" **\n")
-        print(e)
+        # print("\n** Capitol collection Error: "+str(country)+" **\n")
+        # print(e)
         pass
 
 
@@ -189,7 +199,7 @@ def get_country_info(country, url):
     # president
     # get_pres(infoboxlist[0], country)
     # prime minister
-    # get_pm(infoboxlist[0], country)
+    get_pm(infoboxlist[0], country)
     # government
     # get_government(infoboxlist[0], country)
     # area

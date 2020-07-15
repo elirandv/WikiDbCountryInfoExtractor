@@ -15,11 +15,6 @@ if __name__ == '__main__':
         print("Ontology.nt was added")
         print("WikiDb Country Info Extractor command done.")
     elif command=="question":
-
-        # query = parser(sys.argv[2])
-        
-        query = "select ?c where { " \
-            " ?c <"+wiki_prefix+"catpital> <"+wiki_prefix+"Central_African_Republic>} "
             
         get_query(query, "ontology.nt")
         print("???")

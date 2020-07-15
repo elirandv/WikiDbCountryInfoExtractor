@@ -1,3 +1,3 @@
-def get_query(query, ontology ):
+def get_query(query, ontology):
     
   return

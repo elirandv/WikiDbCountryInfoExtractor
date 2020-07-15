@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
 		for ans in answer:
 			print(ans)
-		print("WikiDb Country Info Extractor command done.")
+		# print("WikiDb Country Info Extractor command done.")
 	else:
 		# command!="create" or command!="question"
 		illegal_command()

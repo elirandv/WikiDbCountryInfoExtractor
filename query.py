@@ -3,25 +3,25 @@ import rdflib
 
 ontology = rdflib.Graph()
 ontology.parse("ontology.nt", format="nt")
-wiki_prefix = "http://en.wikipedia.org"
+wiki_prefix = "http://en.wikipedia.org/"
 
 
 # country edges
-president_edge = rdflib.URIRef(wiki_prefix + "/president")
-prime_minister_edge = rdflib.URIRef(wiki_prefix + "/prime_minister")
-population_edge = rdflib.URIRef(wiki_prefix + "/population")
-area_edge = rdflib.URIRef(wiki_prefix + "/area")
-government_edge = rdflib.URIRef(wiki_prefix + "/government")
-capitol_edge = rdflib.URIRef(wiki_prefix + "/capitol")
+president_edge = rdflib.URIRef(wiki_prefix + "president")
+prime_minister_edge = rdflib.URIRef(wiki_prefix + "prime_minister")
+population_edge = rdflib.URIRef(wiki_prefix + "population")
+area_edge = rdflib.URIRef(wiki_prefix + "area")
+government_edge = rdflib.URIRef(wiki_prefix + "government")
+capitol_edge = rdflib.URIRef(wiki_prefix + "capitol")
 
 # person edges
-birthDate_edge = rdflib.URIRef(wiki_prefix + "/birthDate")
+birthDate_edge = rdflib.URIRef(wiki_prefix + "birthDate")
 
 
 def who_is_pres(country):
 	q = "select ?p where { " \
 	    " <" + wiki_prefix + country + "> <" + president_edge + "> ?p} "
-	return ontology.query(q)
+	return list(ontology.query(q))
 
 
 def who_is_pm(country):

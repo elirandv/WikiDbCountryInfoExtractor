@@ -20,20 +20,15 @@ birthDate_edge = wiki_prefix + "/birthDate"
 
 def clean(line):
     line = str(line)
-    line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
-    line.replace(",", "")
-    line.replace("'", "")
-    line.replace(")", "")
-    line.replace("_", " ")
+    line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
+    line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
     return line
 
 
 def who_is_pres(country):
     answer = []
-    print(country)
     q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + president_edge + "> ?p}"
     for line in list(ontology.query(q)):
-        print(clean(line))
         answer.append(clean(line))
     return answer
 

@@ -76,7 +76,7 @@ def parse(question):
     elif question[0] == 'When' or question[0] == 'when':
         answer = when_ques(question)
     else:
-        answer = 'Error'
+        answer = 'Error: not a question'
 
     return answer
 

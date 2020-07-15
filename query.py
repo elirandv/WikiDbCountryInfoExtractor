@@ -1,7 +1,5 @@
 import ontology_maker
 
-wiki_prefix = "http://en.wikipedia.org"
-
 
 def who_is_pres(country):
 	q = "select ?p where { " \

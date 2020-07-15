@@ -34,15 +34,20 @@ def who_is_pres(country):
 
 
 def who_is_pm(country):
-    q = "select ?p where { " \
-        " <" + wiki_prefix + country + "> <" + prime_minister_edge + "> ?p} "
-    return ontology.query(q)
+    answer = []
+    q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + prime_minister_edge + "> ?p}"
+    for line in list(ontology.query(q)):
+        answer.append(clean(line))
+    return answer
 
 
 def what_is_pop(country):
+    answer = []
     q = "select ?p where { " \
         " <" + wiki_prefix + country + "> <" + population_edge + "> ?p} "
-    return ontology.query(q)
+    for line in list(ontology.query(q)):
+        answer.append(clean(line))
+    return answer
 
 
 def what_is_area(country):

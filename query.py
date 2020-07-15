@@ -19,7 +19,7 @@ birthDate_edge = rdflib.URIRef(wiki_prefix + "/birthDate")
 
 
 def who_is_pres(country):
-	q = "select ?p where { ?p <" + president_edge + "> <" + wiki_prefix + country + ">} "
+	q = "select ?p where { ?p <" + president_edge + "> <" + wiki_prefix +"/wiki/"+ country + ">} "
 	return ontology.query(q)
 
 

@@ -1,6 +1,6 @@
 import sys
 from ontology_maker import call_maker
-import parser
+from parser import parse
 
 
 def illegal_command():
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 		for i in range(2, len(sys.argv)):
 			sentence.append(sys.argv[i])
 
-		answer = parser.parse(sentence)
+		answer = parse(sentence)
 		print(answer)
 		print("WikiDb Country Info Extractor command done.")
 	else:

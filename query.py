@@ -5,7 +5,6 @@ ontology = rdflib.Graph()
 ontology.parse("ontology.nt", format="nt")
 wiki_prefix = "http://en.wikipedia.org"
 
-
 # country edges
 president_edge = wiki_prefix + "/president"
 prime_minister_edge = wiki_prefix + "/prime_minister"
@@ -19,74 +18,76 @@ birthDate_edge = wiki_prefix + "/birthDate"
 
 
 def clean(line):
-    line = str(line)
-    line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
-    line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
-    return line
+	line = str(line)
+	line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
+	line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
+	return line
 
 
 def who_is_pres(country):
-    answer = []
-    q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + president_edge + "> ?p}"
-    for line in list(ontology.query(q)):
-        answer.append(clean(line))
-    return answer
+	answer = []
+	q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + president_edge + "> ?p}"
+	for line in list(ontology.query(q)):
+		answer.append(clean(line))
+	return answer
 
 
 def who_is_pm(country):
-    answer = []
-    q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + prime_minister_edge + "> ?p}"
-    for line in list(ontology.query(q)):
-        answer.append(clean(line))
-    return answer
+	answer = []
+	q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + prime_minister_edge + "> ?p}"
+	for line in list(ontology.query(q)):
+		answer.append(clean(line))
+	return answer
 
 
 def what_is_pop(country):
-    answer = []
-    q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + population_edge + "> ?p} "
-    for line in list(ontology.query(q)):
-        answer.append(clean(line))
-    return answer
+	answer = []
+	q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + population_edge + "> ?p} "
+	for line in list(ontology.query(q)):
+		answer.append(clean(line))
+	return answer
 
 
 def what_is_area(country):
-    answer = []
-    q = "select ?a where { <" + wiki_prefix + "/wiki/" + country + "> <" + area_edge + "> ?a} "
-    for line in list(ontology.query(q)):
-        answer.append(clean(line))
-    return answer
+	answer = []
+	q = "select ?a where { <" + wiki_prefix + "/wiki/" + country + "> <" + area_edge + "> ?a} "
+	for line in list(ontology.query(q)):
+		answer.append(clean(line))
+	return answer
 
 
 def what_is_gov(country):
-    answer = []
-    q = "select ?g where { <" + wiki_prefix + "/wiki/" + country + "> <" + government_edge + "> ?g} "
-    for line in list(ontology.query(q)):
-        answer.append(clean(line))
-    return answer
+	answer = []
+	q = "select ?g where { <" + wiki_prefix + "/wiki/" + country + "> <" + government_edge + "> ?g} "
+	for line in list(ontology.query(q)):
+		answer.append(clean(line))
+	return answer
 
 
 def what_is_cap(country):
-    answer = []
-    q = "select ?c where { <" + wiki_prefix + "/wiki/" + country + "> <" + capital_edge + "> ?c} "
-    for line in list(ontology.query(q)):
-        answer.append(clean(line))
-    return answer
+	answer = []
+	q = "select ?c where { <" + wiki_prefix + "/wiki/" + country + "> <" + capital_edge + "> ?c} "
+	for line in list(ontology.query(q)):
+		answer.append(clean(line))
+	return answer
 
 
 def when_was_pres_born(country):
-    q = "select ?d where { " \
-        " <" + wiki_prefix + country + "> <" + president_edge + "> ?p} " \
-        " ?p <" + birthDate_edge + "> ?d} "
-    return ontology.query(q)
+	answer = []
+	q = "select ?d where {<" + wiki_prefix + "/wiki/" + country + "> <" + president_edge + "> ?p . ?p <" + birthDate_edge + "> ?d}"
+	for line in list(ontology.query(q)):
+		print(line)
+		answer.append(clean(line))
+	return answer
 
 
 def when_was_pm_born(country):
-    q = "select ?d where { " \
-        " <" + wiki_prefix + country + "> <" + prime_minister_edge + "> ?p} " \
-        " ?p <" + birthDate_edge + "> ?d} "
-    return list(ontology.query(q))
+	q = "select ?d where { " \
+	    " <" + wiki_prefix + country + "> <" + prime_minister_edge + "> ?p} " \
+	                                                                 " ?p <" + birthDate_edge + "> ?d} "
+	return list(ontology.query(q))
 
 
 def who_is(person):
-    q = "select ?e ?c where {" + person + " ?e ?c} "
-    return ontology.query(q)
+	q = "select ?e ?c where {" + person + " ?e ?c} "
+	return ontology.query(q)

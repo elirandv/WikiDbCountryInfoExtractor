@@ -38,12 +38,26 @@ def what_ques(question):
     if question[1] != "is" or question[2] != "the" or question[4] != "of":
         return 'Error: wrong "what" question format'
     if question[3] == "population":
-	    return
-    return 'Error: "what" question'
+        return query.what_is_pop(fix_str_lst(question[5:]))
+    if question[3] == "area":
+        return query.what_is_area(fix_str_lst(question[5:]))
+    if question[3] == "government":
+        return query.what_is_gov(fix_str_lst(question[5:]))
+    if question[3] == "capital":
+        return query.what_is_cap(fix_str_lst(question[5:]))
+    return 'Error: unknown "what" question'
 
 
 def when_ques(question):
-    return 'Error'
+    if len(question) < 7:
+        return 'Error: when question too short'
+    if question[1] != "was" or question[2] != "the" or question[-1] != "born":
+        return 'Error: wrong "when" question format'
+    if question[3] == "president" and question[4] == "of":
+        return query.when_was_pres_born(fix_str_lst(question[5:-1]))
+    if question[3] == "prime" and question[4] == "minister" and question[5] == "of":
+        return query.when_was_pm_born(fix_str_lst(question[6:-1]))
+    return 'Error: unknown "what" question'
 
 
 def parse(question):

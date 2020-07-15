@@ -21,6 +21,8 @@ def clean(line):
 	line = str(line)
 	line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
 	line = line.replace("'", "").replace(")", "").replace("_", " ")
+	if line.endswith(","):
+		line = line[:-1]
 	return line
 
 

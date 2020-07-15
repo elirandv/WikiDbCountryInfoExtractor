@@ -1,8 +1,6 @@
 import sys
 from ontology_maker import call_maker
 from parser import parse
-from sparQL import get_query
-
 
 if __name__ == '__main__':
     wiki_prefix = "http://en.wikipedia.org"

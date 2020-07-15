@@ -13,7 +13,7 @@ prime_minister_edge = rdflib.URIRef(wiki_prefix + "/prime_minister")
 population_edge = rdflib.URIRef(wiki_prefix + "/population")
 area_edge = rdflib.URIRef(wiki_prefix + "/area")
 government_edge = rdflib.URIRef(wiki_prefix + "/government")
-capitol_edge = rdflib.URIRef(wiki_prefix + "/capitol")
+capital_edge = rdflib.URIRef(wiki_prefix + "/capital")
 
 # person edges
 birthDate_edge = rdflib.URIRef(wiki_prefix + "/birthDate")
@@ -161,16 +161,16 @@ def get_pop(infobox, country):
         pass
 
 
-def get_capitol(infobox, country):
+def get_capital(infobox, country):
     try:
         cap = infobox.xpath("(//tr/th/text()[contains(., 'Capital')]/../../td//a[not(@class='image')]/@href)[1]")[0]
-        capitol = clean_string(cap)
+        capital = clean_string(cap)
         cap_link = wiki_prefix + cap
 
-        # print("\t" + str(country) + ",\t" + capitol + ":\t" + cap_link)
+        # print("\t" + str(country) + ",\t" + capital + ":\t" + cap_link)
 
-        capitol = add_to_onto(capitol)
-        ontology.add((country, capitol_edge, capitol))
+        capital = add_to_onto(capital)
+        ontology.add((country, capital_edge, capital))
 
     except Exception as e:
         # print("\n** Capitol collection Error: "+str(country)+" **\n")
@@ -194,7 +194,7 @@ def get_country_info(country, url):
     # population
     get_pop(infoboxlist[0], country)
     # capital
-    get_capitol(infoboxlist[0], country)
+    get_capital(infoboxlist[0], country)
     return 1
 
 

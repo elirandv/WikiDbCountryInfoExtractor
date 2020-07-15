@@ -20,7 +20,7 @@ birthDate_edge = wiki_prefix + "/birthDate"
 def clean(line):
 	line = str(line)
 	line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
-	line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
+	line = line.replace("'", "").replace(")", "").replace("_", " ")
 	return line
 
 

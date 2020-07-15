@@ -1,6 +1,6 @@
 import sys
 from ontology_maker import make_ontology
-#from parser import parse
+from parser import parse
 from sparQL import get_query
 
 if __name__ == '__main__':

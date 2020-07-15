@@ -148,6 +148,7 @@ def get_pop(infobox, country):
     try:
         p = infobox.xpath("(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[1]|(.//th["
                           "contains(text(), 'Population')]/../following-sibling::tr//td//text())[1]")[0]
+        p = clean(p)
         population = p.split('\xa0')[0]
 
         # print("\n\tPopulation="+population)

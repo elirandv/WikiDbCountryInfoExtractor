@@ -50,9 +50,11 @@ def what_is_pop(country):
 
 
 def what_is_area(country):
-    q = "select ?a where { " \
-        "  <" + wiki_prefix + country + "> <" + area_edge + "> ?a} "
-    return ontology.query(q)
+    answer = []
+    q = "select ?a where { <" + wiki_prefix + "/wiki/" + country + "> <" + area_edge + "> ?a} "
+    for line in list(ontology.query(q)):
+        answer.append(clean(line))
+    return answer
 
 
 def what_is_gov(country):

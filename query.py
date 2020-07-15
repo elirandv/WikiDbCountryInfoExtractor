@@ -12,7 +12,7 @@ prime_minister_edge = wiki_prefix + "/prime_minister"
 population_edge = wiki_prefix + "/population"
 area_edge = wiki_prefix + "/area"
 government_edge = wiki_prefix + "/government"
-capitol_edge = wiki_prefix + "/capitol"
+capital_edge = wiki_prefix + "/capital"
 
 # person edges
 birthDate_edge = wiki_prefix + "/birthDate"
@@ -58,15 +58,19 @@ def what_is_area(country):
 
 
 def what_is_gov(country):
-    q = "select ?g where { " \
-        " <" + wiki_prefix + country + "> <" + government_edge + "> ?g} "
-    return ontology.query(q)
+    answer = []
+    q = "select ?g where { <" + wiki_prefix + "/wiki/" + country + "> <" + government_edge + "> ?g} "
+    for line in list(ontology.query(q)):
+        answer.append(clean(line))
+    return answer
 
 
 def what_is_cap(country):
-    q = "select ?c where { " \
-        " <" + wiki_prefix + country + "> <" + capitol_edge + "> ?c} "
-    return ontology.query(q)
+    answer = []
+    q = "select ?c where { <" + wiki_prefix + "/wiki/" + country + "> <" + capital_edge + "> ?c} "
+    for line in list(ontology.query(q)):
+        answer.append(clean(line))
+    return answer
 
 
 def when_was_pres_born(country):

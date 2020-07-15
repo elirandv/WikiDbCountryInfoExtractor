@@ -10,14 +10,14 @@ def illegal_command():
 
 if __name__ == '__main__':
 
-	if len(sys.argv) == 1:
+	if len(sys.argv) < 3:
 		illegal_command()
 
 	command = sys.argv[1]
 	if command == "create":
 		if sys.argv[2] != "ontology.nt" or len(sys.argv) > 3:
 			illegal_command()
-			
+
 		print("WikiDb Country Info Extractor Creating ontology...")
 		call_maker()
 		print("WikiDb Country Info Extractor command done.")
@@ -26,7 +26,7 @@ if __name__ == '__main__':
 		for i in range(2, len(sys.argv)):
 			sentence.append(sys.argv[i])
 
-		answer = parse(sentence)
+		answer = parser.parse(sentence)
 		print(answer)
 		print("WikiDb Country Info Extractor command done.")
 	else:

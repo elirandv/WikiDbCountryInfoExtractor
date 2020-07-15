@@ -10,7 +10,7 @@ def illegal_command():
 
 if __name__ == '__main__':
 
-	if len(sys.argv) == 1:
+	if len(sys.argv) < 3:
 		illegal_command()
 
 	command = sys.argv[1]

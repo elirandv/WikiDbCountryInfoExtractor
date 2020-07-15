@@ -1,6 +1,6 @@
 import sys
 from ontology_maker import call_maker
-from parser import parse
+import parser
 
 
 def illegal_command():

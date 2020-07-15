@@ -2,6 +2,7 @@ import sys
 from ontology_maker import call_maker
 from parser import parse
 
+
 def illegal_command():
 	print("Illegal command, please try 'create' or 'question'.")
 	exit(0)

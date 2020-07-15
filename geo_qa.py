@@ -17,7 +17,7 @@ if __name__ == '__main__':
 	if command == "create":
 		if sys.argv[2] != "ontology.nt" or len(sys.argv) > 3:
 			illegal_command()
-			
+
 		print("WikiDb Country Info Extractor Creating ontology...")
 		call_maker()
 		print("WikiDb Country Info Extractor command done.")

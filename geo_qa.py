@@ -26,7 +26,8 @@ if __name__ == '__main__':
 		for i in range(2, len(sys.argv)):
 			sentence.append(sys.argv[i])
 		answer = parse(sentence)
-		print(answer)
+		for ans in answer:
+			print(ans)
 		print("WikiDb Country Info Extractor command done.")
 	else:
 		# command!="create" or command!="question"

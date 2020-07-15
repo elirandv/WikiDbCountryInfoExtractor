@@ -2,7 +2,7 @@ import query
 
 
 # aux func
-def unclean_str_lst(str_lst):
+def fix_str_lst(str_lst):
     res = ""
     for str in str_lst:
         res += str
@@ -14,30 +14,32 @@ def who_ques(question):
     if len(question) < 3:
         return 'Error: who question too short'
     if question[1] != "is":
-        return 'Error'
+        return 'Error: wrong "who" question format'
     if question[2] == "the":
         # who is president of..
         if len(question) < 6:
             return 'Error: who question too short'
         if question[3] == "president" and question[4] == "of":
-            return query.who_is_pres(unclean_str_lst(question[5:]))
+            return query.who_is_pres(fix_str_lst(question[5:]))
 
         # who is prime minister of..
         if len(question) < 7:
             return 'Error: who question too short'
         if question[3] == "prime" and question[4] == "minister" and question[5] == "of":
-            return query.who_is_pm(question[6])
+            return query.who_is_pm(fix_str_lst(question[6:]))
 
     # who is <person>
-    if len(question) > 3:
-        return 'Error: who question too long'
-    return query.who_is(question[2])
+    return query.who_is(fix_str_lst(question[2:]))
 
 
 def what_ques(question):
     if len(question) < 6:
         return 'Error: what question too short'
-    return 'Error'
+    if question[1] != "is" or question[2] != "the" or question[4] != "of":
+        return 'Error: wrong "what" question format'
+    if question[3] == "population":
+	    return
+    return 'Error: "what" question'
 
 
 def when_ques(question):

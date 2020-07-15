@@ -43,8 +43,7 @@ def who_is_pm(country):
 
 def what_is_pop(country):
     answer = []
-    q = "select ?p where { " \
-        " <" + wiki_prefix + country + "> <" + population_edge + "> ?p} "
+    q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + population_edge + "> ?p} "
     for line in list(ontology.query(q)):
         answer.append(clean(line))
     return answer

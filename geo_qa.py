@@ -24,7 +24,7 @@ if __name__ == '__main__':
 	elif command == "question":
 		sentence = []
 		for i in range(2, len(sys.argv)):
-			sentence.append(word)
+			sentence.append(sys.argv[i])
 
 		answer = parser.parse(sentence)
 		print(answer)

@@ -7,8 +7,7 @@ wiki_prefix = "http://en.wikipedia.org"
 
 
 def who_is_pres(country):
-	q = "select ?p where { " \
-	    " ?p <" + president_edge + "> <" + wiki_prefix + country + ">} "
+	q = "select ?p where { ?p <" + president_edge + "> <" + wiki_prefix + country + ">} "
 	return ontology.query(q)
 
 
@@ -57,6 +56,5 @@ def when_was_pm_born(country):
 
 
 def who_is(person):
-	q = "select ?e ?c where { " \
-	    " " + person + " ?e ?c} "
+	q = "select ?e ?c where {" + person + " ?e ?c} "
 	return ontology.query(q)

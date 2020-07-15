@@ -7,6 +7,10 @@ wiki_prefix = "http://en.wikipedia.org"
 # i use global ontology for faster run time
 ontology = rdflib.Graph()
 
+type = rdflib.URIRef("rdf:type")
+country_ent = rdflib.URIRef(wiki_prefix + "/country")
+person_ent = rdflib.URIRef(wiki_prefix + "/person")
+
 # country edges
 president_edge = rdflib.URIRef(wiki_prefix + "/president")
 prime_minister_edge = rdflib.URIRef(wiki_prefix + "/prime_minister")
@@ -71,6 +75,7 @@ def get_pres(infobox, country):
 
         # print(president + "\t" + pres_link)
         president = add_to_onto(president)
+        ontology.add((president, type , person_ent))
         ontology.add((country, president_edge, president))
 
         get_person_info(president, pres_link)
@@ -88,6 +93,7 @@ def get_pm(infobox, country):
 
         # print("\t" + prime_m + "\t" + pm_link)
         prime_m = add_to_onto(prime_m)
+        ontology.add((prime_m, type , person_ent))
         ontology.add((country, prime_minister_edge, prime_m))
         get_person_info(prime_m, pm_link)
 
@@ -233,10 +239,10 @@ def make_ontology(url):
         # print("\t"+country + "\t" + url)
 
         rdf_c = add_to_onto(country)
+        ontology.add((rdf_c, country_ent , country_ent))
         res += get_country_info(rdf_c, url)
         i += 1
     # print("Countries count in Ontology=" + str(res))
-
 
 def call_maker():
 

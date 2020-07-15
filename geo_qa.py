@@ -3,7 +3,6 @@ from ontology_maker import call_maker
 from MyParser import parse
 
 
-
 def illegal_command():
 	print("Illegal command, please try 'create' or 'question'.")
 	exit(0)

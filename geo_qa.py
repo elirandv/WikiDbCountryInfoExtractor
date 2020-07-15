@@ -1,6 +1,6 @@
 import sys
 from ontology_maker import call_maker
-from parser import parse
+from MyParser import parse
 
 
 

@@ -1,5 +1,8 @@
 import ontology_maker
+import rdflib
 
+ontology = rdflib.Graph()
+ontology.parse("ontology.nt", format="nt")
 wiki_prefix = "http://en.wikipedia.org"
 
 

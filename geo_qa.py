@@ -25,13 +25,13 @@ if __name__ == '__main__':
 	elif command == "question":
 
 		if not os.path.isfile("ontology.nt"):
-			# there's a Mean Girls reference hiding here
+			# there's a Mean Girls reference hidden here
 			print("The file does not exist!")
 			exit(0)
 
 		sentence = []
 		for i in range(2, len(sys.argv)):
-			sentence.append(sys.argv[i])
+			sentence = sys.argv[i].split(" ")
 		answer = parse(sentence)
 
 		# check for error message, if error exit

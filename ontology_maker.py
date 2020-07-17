@@ -156,11 +156,17 @@ def get_pop(infobox, country):
     try:
         p = infobox.xpath("(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[1]|(.//th["
                           "contains(text(), 'Population')]/../following-sibling::tr//td//text())[1]")[0]
+<<<<<<< HEAD
         if str(country) == "https://en.wikipedia.org/wiki/Russia":
             p="(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[2]"
         population = clean_string(p)
         population = population.split('_')[0]
         population = population.split('/')[0]
+=======
+        p = clean(p)
+        population = p.split('\xa0')[0]
+
+>>>>>>> fe5dba5256b85a2314583cafd5e9b0fc6ddc977c
         # print("\n\tPopulation="+population)
         population = add_to_onto(population)
         ontology.add((country, population_edge, population))

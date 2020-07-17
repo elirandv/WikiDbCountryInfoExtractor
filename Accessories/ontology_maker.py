@@ -161,14 +161,14 @@ def get_pop(infobox, country):
         population = clean_string(p)
         population = population.split('_')[0]
         population = population.split('/')[0]
-        # print("\n\tPopulation="+population)
+        #print("\n\t** Pop of " + str(country) + ": " + population)
         population = add_to_onto(population)
         ontology.add((country, population_edge, population))
 
     except Exception as e:
-        # print(e)
-        # print("\n** Population collection Error: " + str(country) + " **\n")
-        # exit()
+        print(e)
+        print("\n** Population collection Error: " + str(country) + " **\n")
+        exit()
         pass
 
 
@@ -192,7 +192,7 @@ def get_capital(infobox, country):
 def get_country_info(country, url):
     res = requests.get(url)
     doc = lxml.html.fromstring(res.content)
-    ontology.add((country, type , country_ent))
+
     infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
     # president
     get_pres(infoboxlist[0], country)
@@ -242,11 +242,12 @@ def make_ontology(url):
         url = country_dict[country]
         # print("\nCountry#" + str(i))
         # print("\t"+country + "\t" + url)
+
         rdf_c = add_to_onto(country)
+        ontology.add((rdf_c, type , country_ent))
         res += get_country_info(rdf_c, url)
         i += 1
     # print("Countries count in Ontology=" + str(res))
-
 
 def call_maker():
 

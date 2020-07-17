@@ -22,13 +22,12 @@ if __name__ == '__main__':
 		call_maker()
 		print("WikiDb Country Info Extractor command done.")
 	elif command == "question":
-		# try:
-			# ontology = rdflib.Graph()
-			# ontology.parse("ontology.nt", format="nt")
-		# except IOError:
-			# print("Illegal command, ontology.nt File not accessible")
-		# finally:
-			# exit(0)
+		try:
+			f = open("ontology.nt")
+		except IOError:
+			print("Illegal command, ontology.nt File not accessible")
+		finally:
+			exit(0)
 		sentence = []
 		for i in range(2, len(sys.argv)):
 			sentence.append(sys.argv[i])

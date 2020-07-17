@@ -2,32 +2,29 @@ import ontology_maker
 import rdflib
 
 ontology = rdflib.Graph()
-ontology.parse("ontology.nt", format="nt")
+try:
+	ontology.parse("ontology.nt", format="nt")
+except IOError:
+	pass
 wiki_prefix = "http://en.wikipedia.org"
 
-# i use global ontology for faster run time
-ontology = rdflib.Graph()
-
-type = rdflib.URIRef("rdf:type")
-country_ent = rdflib.URIRef(wiki_prefix + "/country")
-person_ent = rdflib.URIRef(wiki_prefix + "/person")
-
 # country edges
-president_edge = rdflib.URIRef(wiki_prefix + "/president")
-prime_minister_edge = rdflib.URIRef(wiki_prefix + "/prime_minister")
-population_edge = rdflib.URIRef(wiki_prefix + "/population")
-area_edge = rdflib.URIRef(wiki_prefix + "/area")
-government_edge = rdflib.URIRef(wiki_prefix + "/government")
-capital_edge = rdflib.URIRef(wiki_prefix + "/capital")
+president_edge = wiki_prefix + "/president"
+prime_minister_edge = wiki_prefix + "/prime_minister"
+population_edge = wiki_prefix + "/population"
+area_edge = wiki_prefix + "/area"
+government_edge = wiki_prefix + "/government"
+capital_edge = wiki_prefix + "/capital"
 
 # person edges
-birthDate_edge = rdflib.URIRef(wiki_prefix + "/birthDate")
-
+birthDate_edge = wiki_prefix + "/birthDate"
 
 def clean(line):
 	line = str(line)
 	line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
-	line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
+	line = line.replace("'", "").replace(")", "").replace("_", " ")
+	if line.endswith(","):
+		line = line[:-1]
 	return line
 
 
@@ -42,7 +39,7 @@ def clean_date(line):
 def who_is_pres(country):
 	answer = []
 	q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + president_edge + "> ?p}"
-    for line in list(ontology.query(q)):
+	for line in list(ontology.query(q)):
 		answer.append(clean(line))
 	return answer
 
@@ -50,7 +47,7 @@ def who_is_pres(country):
 def who_is_pm(country):
 	answer = []
 	q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + prime_minister_edge + "> ?p}"
-    for line in list(ontology.query(q)):
+	for line in list(ontology.query(q)):
 		answer.append(clean(line))
 	return answer
 

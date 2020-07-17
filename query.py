@@ -1,12 +1,12 @@
 import ontology_maker
 import rdflib
+import os
 
 ontology = rdflib.Graph()
-try:
+if os.path.isfile("ontology.nt"):
 	ontology.parse("ontology.nt", format="nt")
-except IOError:
-	pass
-wiki_prefix = "http://en.wikipedia.org"
+
+wiki_prefix = "https://en.wikipedia.org"
 
 # country edges
 president_edge = wiki_prefix + "/president"
@@ -19,9 +19,10 @@ capital_edge = wiki_prefix + "/capital"
 # person edges
 birthDate_edge = wiki_prefix + "/birthDate"
 
+
 def clean(line):
 	line = str(line)
-	line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
+	line = line.replace("(rdflib.term.URIRef('https://en.wikipedia.org/wiki/", "")
 	line = line.replace("'", "").replace(")", "").replace("_", " ")
 	if line.endswith(","):
 		line = line[:-1]

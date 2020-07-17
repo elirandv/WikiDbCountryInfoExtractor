@@ -64,7 +64,8 @@ def parse(question):
     # question is an array of words
     if len(question) < 1:
         return 'Error: empty question'
-    if not question[len(question)-1].endswith("?"):
+
+    if not question[len(question)-1].endswith('?'):
         return 'Error: please end with "?"'
     # slice '?' from end
     question[len(question) - 1] = question[len(question)-1][:-1]

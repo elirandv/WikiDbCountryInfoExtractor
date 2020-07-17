@@ -5,27 +5,31 @@ import rdflib
 from query import *
 
 ontology = rdflib.Graph()
-ontology.parse("ontology.nt", format="nt")
-wiki_prefix = "http://en.wikipedia.org"
+if os.path.isfile("ontology.nt"):
+	ontology.parse("ontology.nt", format="nt")
 
-type = rdflib.URIRef("rdf:type")
-country_ent = rdflib.URIRef(wiki_prefix + "/country")
-person_ent = rdflib.URIRef(wiki_prefix + "/person")
+wiki_prefix = "https://en.wikipedia.org"
+
+type = "rdf:type"
+country_ent = wiki_prefix + "/country"
+person_ent = wiki_prefix + "/person"
 
 # country edges
-president_edge = rdflib.URIRef(wiki_prefix + "/president")
-prime_minister_edge = rdflib.URIRef(wiki_prefix + "/prime_minister")
-population_edge = rdflib.URIRef(wiki_prefix + "/population")
-area_edge = rdflib.URIRef(wiki_prefix + "/area")
-government_edge = rdflib.URIRef(wiki_prefix + "/government")
-capital_edge = rdflib.URIRef(wiki_prefix + "/capital")
+president_edge = wiki_prefix + "/president"
+prime_minister_edge = wiki_prefix + "/prime_minister"
+population_edge = wiki_prefix + "/population"
+area_edge = wiki_prefix + "/area"
+government_edge = wiki_prefix + "/government"
+capital_edge = wiki_prefix + "/capital"
 
 # person edges
-birthDate_edge = rdflib.URIRef(wiki_prefix + "/birthDate")
+birthDate_edge = wiki_prefix + "/birthDate"
+
 
 def illegal_command():
     print("problen/n")
     exit(0)
+
 
 def clean(line):
     line = str(line)
@@ -33,29 +37,32 @@ def clean(line):
     line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
     return line
 
+
 def q(i):
     answer = []
-    if i==1:
+    if i == 1:
         print("\nPM count?\n")
         q = "select (count(distinct ?p) as ?n) where { ?c <" + prime_minister_edge + "> ?p }"
-    elif i==2:
+    elif i == 2:
         print("\ncountries count?\n")
         q = "select (count(distinct ?c) as ?n) where { ?c <rdf:type> <" + country_ent + "> }"
-    elif i==3:
+    elif i == 3:
         print("\nrepublics count?\n")
         q = "select (count(distinct ?c) as ?n) where { ?c <" + government_edge + "> ?g. filter (contains(str(?g),'republic'))  }"
-    elif i==4:
+    elif i == 4:
         print("\nmonarchy count?\n")
         q = "select (count(distinct ?c) as ?n) where { ?c <" + government_edge + "> ?g. filter (contains(str(?g),'monarchy'))  }"
-    elif i==5:
+    elif i == 5:
         print("\nPM list?\n")
         q = "select distinct ?p where { ?c <" + prime_minister_edge + "> ?p }"
-    elif i==6:
+    elif i == 6:
         print("\nrepublics list?\n")
         q = "select distinct ?c where { ?c <" + government_edge + "> ?g. filter (contains(str(?g),'republic'))  }"
-    for line in list(ontology.query(q)):
-        answer.append(clean(line))
+
+    for line in ontology.query(q):
+        answer.append(line.n)
     return answer
+
 
 if __name__ == '__main__':
 
@@ -82,8 +89,8 @@ if __name__ == '__main__':
     
     print("\n")
 
-    for i in range(1,5):
-        answer=q(i)
+    for i in range(1, 5):
+        answer = q(i)
         # check for error message, if error exit
         if isinstance(answer, str):
             illegal_command()

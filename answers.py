@@ -71,8 +71,8 @@ def q(i):
         
 if __name__ == '__main__':
 
-    print("activate: python geo_qa.py create ontology.nt\n")
-    os.system("python geo_qa.py create ontology.nt")
+    # print("activate: python geo_qa.py create ontology.nt\n")
+    # os.system("python geo_qa.py create ontology.nt")
 
     print("question 1: who is the president of Italy?\n")
     os.system('python geo_qa.py question "who is the president of Italy?"')

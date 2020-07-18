@@ -26,7 +26,7 @@ def clean(line):
 	line = line.replace("_", " ")
 	if line.endswith(","):
 		line = line[:-1]
-	return line
+	return line.title()
 
 
 def who_is_pres(country):

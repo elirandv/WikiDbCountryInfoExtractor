@@ -30,7 +30,8 @@ if __name__ == '__main__':
 			exit(0)
 
 		sentence = []
-		country_name=False
+		country_name = False
+		# notice "ques ques ques" becomes 1 word in argv
 		for i in range(2, len(sys.argv)):
 			# if country_name==False or str(sys.argv[i]).title()=="born".title():
 				# sentence.append(str(sys.argv[i]).title())
@@ -38,7 +39,7 @@ if __name__ == '__main__':
 				# sentence.append(str(sys.argv[i]))
 			# if sentence[-1]=="Of":
 				# country_name=True
-			sentence.append(str(sys.argv[i]).lower())
+			sentence = sys.argv[i].lower().split(" ")
 		answer = parse(sentence)
 
 		# check for error message, if error exit

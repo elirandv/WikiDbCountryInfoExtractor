@@ -67,7 +67,7 @@ def parse(question):
         return 'Error: please end with "?"'
     # slice '?' from end
     question[len(question) - 1] = question[len(question)-1][:-1]
-    print(question)
+    
     if question[0] == 'Who' or question[0] == 'who':
         answer = who_ques(question)
     elif question[0] == 'What' or question[0] == 'what':

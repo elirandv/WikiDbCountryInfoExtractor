@@ -22,8 +22,8 @@ birthDate_edge = wiki_prefix + "/birthDate"
 
 def clean(line):
 	line = str(line)
-	line = line.replace("(rdflib.term.URIRef('https://en.wikipedia.org/wiki/", "")
-	line = line.replace("'", "").replace(")", "").replace("_", " ")
+	line = line.replace("https://en.wikipedia.org/wiki/", "")
+	line = line.replace("_", " ")
 	if line.endswith(","):
 		line = line[:-1]
 	return line
@@ -31,7 +31,7 @@ def clean(line):
 
 def clean_date(line):
 	line = str(line)
-	line = line.replace("(rdflib.term.Literal('", "")
+	# line = line.replace("(rdflib.term.Literal('", "")
 	line = line.replace("', datatype=rdflib.term.URIRef('http://www.w3.org/2001/XMLSchema#date')),)", "")
 	line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
 	return line
@@ -40,16 +40,16 @@ def clean_date(line):
 def who_is_pres(country):
 	answer = []
 	q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + president_edge + "> ?p}"
-	for line in list(ontology.query(q)):
-		answer.append(clean(line))
+	for line in ontology.query(q):
+		answer.append(clean(line.p))
 	return answer
 
 
 def who_is_pm(country):
 	answer = []
 	q = "select ?p where { <" + wiki_prefix + "/wiki/" + country + "> <" + prime_minister_edge + "> ?p}"
-	for line in list(ontology.query(q)):
-		answer.append(clean(line))
+	for line in ontology.query(q):
+		answer.append(clean(line.p))
 	return answer
 
 

@@ -73,7 +73,7 @@ def get_pres(infobox, country):
 		president = clean_string(pres)
 		pres_link = wiki_prefix + pres
 
-		print("\n\t" + president)
+		# print("\n\t" + president)
 		president = add_to_onto(president)
 		ontology.add((president, type, person_ent))
 		ontology.add((country, president_edge, president))
@@ -94,7 +94,7 @@ def get_pm(infobox, country):
 		prime_m = clean_string(pm)
 		pm_link = wiki_prefix + pm
 
-		print("\n\t" + prime_m)
+		# print("\n\t" + prime_m)
 		prime_m = add_to_onto(prime_m)
 		ontology.add((prime_m, type, person_ent))
 		ontology.add((country, prime_minister_edge, prime_m))
@@ -114,7 +114,7 @@ def get_government(infobox, country):
 		if government == "":
 			raise ValueError('Government Not Found')
 
-		print("\n\t" + government)
+		# print("\n\t" + government)
 		government = add_to_onto(government)
 		ontology.add((country, government_edge, government))
 
@@ -142,7 +142,7 @@ def get_area(infobox, country):
 		if country.n3() == "<https://en.wikipedia.org/wiki/channel_islands>":
 			a = "198"
 		area = clean_area(a)
-		print("\n\t" + area )
+		# print("\n\t" + area )
 		area = add_to_onto(area)
 		ontology.add((country, area_edge, area))
 
@@ -164,7 +164,7 @@ def get_pop(infobox, country):
 		population = clean_string(p)
 		population = population.split('_')[0]
 		population = population.split('/')[0]
-		print("\n\t"+population)
+		# print("\n\t"+population)
 		population = add_to_onto(population)
 		ontology.add((country, population_edge, population))
 
@@ -188,7 +188,7 @@ def get_capital(infobox, country):
 		capital = clean_string(cap)
 		cap_link = wiki_prefix + cap
 
-		print("\n\t"+capital)
+		# print("\n\t"+capital)
 
 		capital = add_to_onto(capital)
 		ontology.add((country, capital_edge, capital))
@@ -203,7 +203,7 @@ def get_country_info(country, url):
 	res = requests.get(url)
 	doc = lxml.html.fromstring(res.content)
 	ontology.add((country, type, country_ent))
-	print("\n** Country: "+str(country)+" ** :\n")
+	# print("\n** Country: "+str(country)+" ** :\n")
 	infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
 	# president
 	get_pres(infoboxlist[0], country)

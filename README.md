@@ -6,7 +6,7 @@ https://en-exact-sciences.tau.ac.il/computer
 
 * 2019-2020 Web Data Management Workshop - Final Project
 
-The challenge: 
+## General
 
 This repository is a system for Information Extraction from Wikipedia and answering questions in natural language.
 The program creates an ontology of the countries of the world, their capitals, presidents, prime ministers, type of regime, size of the country & the amount of population; 

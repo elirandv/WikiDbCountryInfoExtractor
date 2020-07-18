@@ -41,7 +41,7 @@ def handle_gvlist(strlist):
 
 
 def add_to_onto(str):
-	return rdflib.URIRef(wiki_prefix + "/wiki/" + str)
+	return rdflib.URIRef(wiki_prefix + "/wiki/" + str.lower())
 
 
 def get_person_info(person, url):
@@ -73,7 +73,7 @@ def get_pres(infobox, country):
 		president = clean_string(pres)
 		pres_link = wiki_prefix + pres
 
-		# print(president + "\t" + pres_link)
+		print("\n\t" + president)
 		president = add_to_onto(president)
 		ontology.add((president, type, person_ent))
 		ontology.add((country, president_edge, president))
@@ -87,14 +87,14 @@ def get_pres(infobox, country):
 
 def get_pm(infobox, country):
 	try:
-		if country.n3() != "<https://en.wikipedia.org/wiki/Guinea-Bissau>":
+		if country.n3() != "<https://en.wikipedia.org/wiki/guinea-bissau>":
 			pm = infobox.xpath(".//a[contains(text() , 'Prime Minister')]/../../following-sibling::td//a/@href")[0]
 		else:
 			pm = infobox.xpath(".//a[contains(text() , 'Prime Minister')]/../../../../td//a/@href")[0]
 		prime_m = clean_string(pm)
 		pm_link = wiki_prefix + pm
 
-		# print("\t" + prime_m + "\t" + pm_link)
+		print("\n\t" + prime_m)
 		prime_m = add_to_onto(prime_m)
 		ontology.add((prime_m, type, person_ent))
 		ontology.add((country, prime_minister_edge, prime_m))
@@ -114,7 +114,7 @@ def get_government(infobox, country):
 		if government == "":
 			raise ValueError('Government Not Found')
 
-		# print(government + "\t")
+		print("\n\t" + government)
 		government = add_to_onto(government)
 		ontology.add((country, government_edge, government))
 
@@ -127,7 +127,6 @@ def get_government(infobox, country):
 def clean_area(a):
 	area = clean_string(a)
 	words = area.split('\xa0')
-	# print("\n\t** " + str(words))
 	if len(words) == 1 or words[1] == "km":
 		area = words[0] + "_km2"
 	else:
@@ -140,10 +139,10 @@ def get_area(infobox, country):
 		a = infobox.xpath("(.//a[contains(text(), 'Area')]/../../following-sibling::tr//td//text())[1]|(.//th["
 		                  "contains(text(), 'Area')]/../following-sibling::tr//td//text())[1] ")[0]
 
-		if country.n3() == "<https://en.wikipedia.org/wiki/Channel_Islands>":
+		if country.n3() == "<https://en.wikipedia.org/wiki/channel_islands>":
 			a = "198"
 		area = clean_area(a)
-		# print("\n\t** Area of " + str(country) + ": " + area )
+		print("\n\t" + area )
 		area = add_to_onto(area)
 		ontology.add((country, area_edge, area))
 
@@ -159,13 +158,13 @@ def get_pop(infobox, country):
 		p = infobox.xpath("(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[1]|(.//th["
 		                  "contains(text(), 'Population')]/../following-sibling::tr//td//text())[1]")[0]
 
-		if country.n3() == "<https://en.wikipedia.org/wiki/Russia>":
+		if country.n3() == "<https://en.wikipedia.org/wiki/russia>":
 			p = infobox.xpath("(.//a[contains(text(), 'Population')]/../../following-sibling::tr//td//text())[2]")[0]
 
 		population = clean_string(p)
 		population = population.split('_')[0]
 		population = population.split('/')[0]
-		# print("\n\tPopulation="+population)
+		print("\n\t"+population)
 		population = add_to_onto(population)
 		ontology.add((country, population_edge, population))
 
@@ -179,10 +178,17 @@ def get_pop(infobox, country):
 def get_capital(infobox, country):
 	try:
 		cap = infobox.xpath("(//tr/th/text()[contains(., 'Capital')]/../../td//a[not(@class='image')]/@href)[1]")[0]
+		if country.n3() == "<https://en.wikipedia.org/wiki/switzerland>":
+			cap = infobox.xpath("(//tr/th/text()[contains(., 'Capital')]/../../td//a[not(@class='image')]/@href)[2]")[0]
+		if country.n3() == "<https://en.wikipedia.org/wiki/vatican_city>":
+			cap = infobox.xpath("(//tr/th/text()[contains(., 'Capital')]/../../td//b/text())")[0]
+		if country.n3() == "<https://en.wikipedia.org/wiki/monaco>":
+			cap = infobox.xpath("//tr/th/text()[contains(., 'Capital')]/../../td/text()[1]")[0]
+			cap = cap.split(" ")[0]
 		capital = clean_string(cap)
 		cap_link = wiki_prefix + cap
 
-		# print("\t" + str(country) + ",\t" + capital + ":\t" + cap_link)
+		print("\n\t"+capital)
 
 		capital = add_to_onto(capital)
 		ontology.add((country, capital_edge, capital))
@@ -197,6 +203,7 @@ def get_country_info(country, url):
 	res = requests.get(url)
 	doc = lxml.html.fromstring(res.content)
 	ontology.add((country, type, country_ent))
+	print("\n** Country: "+str(country)+" ** :\n")
 	infoboxlist = doc.xpath("//table[contains(@class, 'infobox')]")
 	# president
 	get_pres(infoboxlist[0], country)

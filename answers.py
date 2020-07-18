@@ -33,6 +33,7 @@ def illegal_command():
 
 def clean(line):
     line = str(line)
+    line = line.rsplit('/', 1)[-1]
     line = line.replace("(rdflib.term.URIRef('http://en.wikipedia.org/wiki/", "")
     line = line.replace(",", "").replace("'", "").replace(")", "").replace("_", " ")
     return line
@@ -41,30 +42,37 @@ def clean(line):
 def q(i):
     answer = []
     if i == 1:
-        print("\nPM count?\n")
+        print("\n### PM count?\n")
         q = "select (count(distinct ?p) as ?n) where { ?c <" + prime_minister_edge + "> ?p }"
     elif i == 2:
-        print("\ncountries count?\n")
+        print("\n### Countries count?\n")
         q = "select (count(distinct ?c) as ?n) where { ?c <rdf:type> <" + country_ent + "> }"
     elif i == 3:
-        print("\nrepublics count?\n")
+        print("\n### Republics count?\n")
         q = "select (count(distinct ?c) as ?n) where { ?c <" + government_edge + "> ?g. filter (contains(str(?g),'republic'))  }"
     elif i == 4:
-        print("\nmonarchy count?\n")
+        print("\n### Monarchy count?\n")
         q = "select (count(distinct ?c) as ?n) where { ?c <" + government_edge + "> ?g. filter (contains(str(?g),'monarchy'))  }"
     elif i == 5:
-        print("\nPM list?\n")
+        print("\n### PM list?\n")
         q = "select distinct ?p where { ?c <" + prime_minister_edge + "> ?p }"
     elif i == 6:
-        print("\nrepublics list?\n")
+        print("\n### Republics list?\n")
         q = "select distinct ?c where { ?c <" + government_edge + "> ?g. filter (contains(str(?g),'republic'))  }"
 
-    for line in ontology.query(q):
-        answer.append(line.n)
-    return answer
-
-
+    if i<5:
+        for line in ontology.query(q):
+            answer.append(line.n)
+        return answer
+    else:
+        for line in list(ontology.query(q)):
+            answer.append(clean(line))
+        return answer
+        
 if __name__ == '__main__':
+
+    print("activate: python geo_qa.py create ontology.nt\n")
+    os.system("python geo_qa.py create ontology.nt")
 
     print("question 1: who is the president of Italy?\n")
     os.system("python geo_qa.py question who is the president of Italy?")
@@ -86,10 +94,22 @@ if __name__ == '__main__':
     os.system("python geo_qa.py question who is Donald Trump?")
     print("\nquestion 10: who is kyriakos mitsotakis?\n")
     os.system("python geo_qa.py question who is Kyriakos Mitsotakis?")
+
+    print("\nquestion 1: Who is the pResident of itAly?\n")
+    os.system("python geo_qa.py question Who is the pResident of itAly?")
+
+    print("\nquestion 3: what is the PopulaTion of Democratic republic Of the CoNgo?\n")
+    os.system("python geo_qa.py question what is the population of Democratic Republic of the Congo?")
+
+
+    print("\nNull return question 11: who is the president of United States Virgin Islands?\n")
+    os.system("python geo_qa.py question who is the president of United States Virgin Islands?")  
     
+    print("\nNull return question 12: what is the capital of Monaco?\n")
+    os.system("python geo_qa.py question what is the capital of Monaco?")
     print("\n")
 
-    for i in range(1, 5):
+    for i in range(1, 7):
         answer = q(i)
         # check for error message, if error exit
         if isinstance(answer, str):
@@ -97,6 +117,13 @@ if __name__ == '__main__':
             print(answer)
             exit(0)
 
-        for ans in answer:
-            print(ans)
+        if len(answer)==0:
+            pass
+        elif len(answer)==1:
+            print(answer[0])
+        else:
+            print(answer[0], end='')
+            for i in range(1,len(answer)):
+                print(", "+answer[i], end='')
+        print("\n")
     print("All answers WikiDb Country Info Extractor command done.")

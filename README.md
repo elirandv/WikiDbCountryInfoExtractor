@@ -6,6 +6,12 @@ https://en-exact-sciences.tau.ac.il/computer
 
 * 2019-2020 Web Data Management Workshop - Final Project
 
+
+### Features
+
+* World Countries Information Extraction from Wikipedia into XML Ontology (IE,Xpath).
+* Natural language questions answering using SPARQL queries on the created ontology.
+
 ## General
 
 This repository is a system for Information Extraction from Wikipedia and answering questions in natural language.
@@ -79,10 +85,12 @@ $ python geo_qa.py question "who is Kyriakos Mitsotakis?
 $ Prime minister of Greece
 ```
 
-### Features
 
-* World Countries Information Extraction from Wikipedia into XML Ontology (IE,Xpath).
-* Natural language questions answering using SPARQL queries on the created ontology.
+### Malfunctions
+
+In offline mode or in case ontology problem, User may use the following premade ontology:
+
+  ontology_example.nt 
 
 ### Maintainers
 

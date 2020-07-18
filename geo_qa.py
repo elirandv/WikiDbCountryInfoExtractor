@@ -30,17 +30,30 @@ if __name__ == '__main__':
 			exit(0)
 
 		sentence = []
+		country_name=False
 		for i in range(2, len(sys.argv)):
-			sentence = sys.argv[i].split(" ")
+			# if country_name==False or str(sys.argv[i]).title()=="born".title():
+				# sentence.append(str(sys.argv[i]).title())
+			# else:
+				# sentence.append(str(sys.argv[i]))
+			# if sentence[-1]=="Of":
+				# country_name=True
+			sentence.append(str(sys.argv[i]).lower())
 		answer = parse(sentence)
 
 		# check for error message, if error exit
 		if isinstance(answer, str):
 			print(answer)
 			exit(0)
-
-		for ans in answer:
-			print(ans)
+		if len(answer)==0:
+			pass
+		elif len(answer)==1:
+			print(answer[0])
+		else:
+			print(answer[0], end='')
+			for i in range(1,len(answer)):
+				print(", "+answer[i], end='')
+			print("\n")
 		# print("WikiDb Country Info Extractor command done.")
 	else:
 		# command!="create" or command!="question"

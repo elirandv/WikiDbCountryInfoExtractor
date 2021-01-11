@@ -1,6 +1,6 @@
 from query import *
 
-
+#
 # aux func
 def fix_str_lst(str_lst):
     res = ""

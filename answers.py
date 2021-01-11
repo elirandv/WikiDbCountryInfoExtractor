@@ -3,7 +3,7 @@ import os
 import ontology_maker
 import rdflib
 from query import *
-
+#
 ontology = rdflib.Graph()
 if os.path.isfile("ontology.nt"):
 	ontology.parse("ontology.nt", format="nt")
